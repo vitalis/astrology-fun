@@ -220,7 +220,7 @@ export default function BirthForm() {
             <input
               id="latitude"
               type="text"
-              value={latitude !== null ? latitude.toFixed(6) : ''}
+              value={latitude !== null && latitude !== undefined ? latitude.toFixed(6) : ''}
               readOnly
               className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg bg-gray-50 text-gray-600 cursor-not-allowed"
               placeholder="Auto-filled when place is selected"
@@ -235,7 +235,7 @@ export default function BirthForm() {
             <input
               id="longitude"
               type="text"
-              value={longitude !== null ? longitude.toFixed(6) : ''}
+              value={longitude !== null && longitude !== undefined ? longitude.toFixed(6) : ''}
               readOnly
               className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg bg-gray-50 text-gray-600 cursor-not-allowed"
               placeholder="Auto-filled when place is selected"
@@ -250,7 +250,7 @@ export default function BirthForm() {
             <input
               id="utcOffset"
               type="text"
-              value={utcOffset !== null ? `UTC ${utcOffset >= 0 ? '+' : ''}${utcOffset}` : ''}
+              value={utcOffset !== null && utcOffset !== undefined ? `UTC ${utcOffset >= 0 ? '+' : ''}${utcOffset}` : ''}
               readOnly
               className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg bg-gray-50 text-gray-600 cursor-not-allowed"
               placeholder="Auto-filled when place is selected"

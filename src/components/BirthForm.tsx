@@ -34,7 +34,7 @@ export default function BirthForm() {
   const [placeSuggestions, setPlaceSuggestions] = useState<PlaceSuggestion[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [isLoadingSuggestions, setIsLoadingSuggestions] = useState(false);
-  const [searchTimeout, setSearchTimeout] = useState<NodeJS.Timeout | null>(null);
+  const [searchTimeout, setSearchTimeout] = useState<ReturnType<typeof setTimeout> | null>(null);
 
   const placeOfBirth = watch('placeOfBirth');
   const latitude = watch('latitude');
@@ -82,7 +82,7 @@ export default function BirthForm() {
   }, [placeOfBirth]);
 
   // Calculate UTC offset based on latitude and longitude
-  const calculateUTCOffset = (lat: number, lon: number): number => {
+  const calculateUTCOffset = (_lat: number, lon: number): number => {
     // Simple approximation: UTC offset = longitude / 15
     // This is a rough estimate; for production, use a timezone API
     const offset = Math.round(lon / 15);

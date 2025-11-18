@@ -4,7 +4,8 @@ import userEvent from '@testing-library/user-event';
 import BirthForm from './BirthForm';
 
 // Mock fetch for place autocomplete
-global.fetch = vi.fn();
+const mockFetch = vi.fn();
+global.fetch = mockFetch;
 
 describe('BirthForm', () => {
   beforeEach(() => {
@@ -91,7 +92,7 @@ describe('BirthForm', () => {
       },
     ];
 
-    (global.fetch as any).mockResolvedValueOnce({
+    mockFetch.mockResolvedValueOnce({
       json: async () => mockPlaces,
     });
 
@@ -117,7 +118,7 @@ describe('BirthForm', () => {
       },
     ];
 
-    (global.fetch as any).mockResolvedValueOnce({
+    mockFetch.mockResolvedValueOnce({
       json: async () => mockPlaces,
     });
 
@@ -159,7 +160,7 @@ describe('BirthForm', () => {
   it('shows "No locations found" when no suggestions are returned', async () => {
     const user = userEvent.setup();
 
-    (global.fetch as any).mockResolvedValueOnce({
+    mockFetch.mockResolvedValueOnce({
       json: async () => [],
     });
 
@@ -198,7 +199,7 @@ describe('BirthForm', () => {
       },
     ];
 
-    (global.fetch as any).mockResolvedValueOnce({
+    mockFetch.mockResolvedValueOnce({
       json: async () => mockPlaces,
     });
 

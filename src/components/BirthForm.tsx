@@ -34,7 +34,6 @@ export default function BirthForm() {
   const [placeSuggestions, setPlaceSuggestions] = useState<PlaceSuggestion[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [isLoadingSuggestions, setIsLoadingSuggestions] = useState(false);
-  const [searchTimeout, setSearchTimeout] = useState<ReturnType<typeof setTimeout> | null>(null);
 
   const placeOfBirth = watch('placeOfBirth');
   const latitude = watch('latitude');
@@ -47,11 +46,6 @@ export default function BirthForm() {
       setPlaceSuggestions([]);
       setShowSuggestions(false);
       return;
-    }
-
-    // Clear existing timeout
-    if (searchTimeout) {
-      clearTimeout(searchTimeout);
     }
 
     // Set new timeout for debouncing
@@ -74,10 +68,8 @@ export default function BirthForm() {
       }
     }, 500); // Debounce for 500ms
 
-    setSearchTimeout(timeout);
-
     return () => {
-      if (timeout) clearTimeout(timeout);
+      clearTimeout(timeout);
     };
   }, [placeOfBirth]);
 

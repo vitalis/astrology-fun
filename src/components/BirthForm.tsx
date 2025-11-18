@@ -82,7 +82,7 @@ export default function BirthForm() {
   }, [placeOfBirth]);
 
   // Calculate UTC offset based on latitude and longitude
-  const calculateUTCOffset = (lat: number, lon: number): number => {
+  const calculateUTCOffset = (_lat: number, lon: number): number => {
     // Simple approximation: UTC offset = longitude / 15
     // This is a rough estimate; for production, use a timezone API
     const offset = Math.round(lon / 15);

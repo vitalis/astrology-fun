@@ -27,8 +27,12 @@ describe('BirthForm', () => {
   it('renders the header with title and description', () => {
     render(<BirthForm />);
 
-    expect(screen.getByText(/birth chart calculator/i)).toBeInTheDocument();
-    expect(screen.getByText(/enter your birth details/i)).toBeInTheDocument();
+    // Check for title by looking at the h1 element
+    const heading = screen.getByRole('heading', { level: 1 });
+    expect(heading.textContent).toContain('Birth Chart');
+    expect(heading.textContent).toContain('Calculator');
+
+    expect(screen.getByText(/discover the cosmic blueprint/i)).toBeInTheDocument();
   });
 
   it('renders submit button', () => {
@@ -103,8 +107,8 @@ describe('BirthForm', () => {
     await user.type(placeInput, 'New York');
 
     await waitFor(() => {
-      expect(screen.getByText('New York, USA')).toBeInTheDocument();
-      expect(screen.getByText('New York, UK')).toBeInTheDocument();
+      expect(screen.getByText(/📍 New York, USA/)).toBeInTheDocument();
+      expect(screen.getByText(/📍 New York, UK/)).toBeInTheDocument();
     });
   });
 
@@ -139,10 +143,10 @@ describe('BirthForm', () => {
     await user.type(placeInput, 'New York');
 
     await waitFor(() => {
-      expect(screen.getByText('New York, USA')).toBeInTheDocument();
+      expect(screen.getByText(/📍 New York, USA/)).toBeInTheDocument();
     });
 
-    const suggestion = screen.getByText('New York, USA');
+    const suggestion = screen.getByText(/📍 New York, USA/);
     await user.click(suggestion);
 
     await waitFor(() => {
@@ -236,10 +240,10 @@ describe('BirthForm', () => {
     await user.type(placeInput, 'London');
 
     await waitFor(() => {
-      expect(screen.getByText('London, UK')).toBeInTheDocument();
+      expect(screen.getByText(/📍 London, UK/)).toBeInTheDocument();
     });
 
-    await user.click(screen.getByText('London, UK'));
+    await user.click(screen.getByText(/📍 London, UK/));
 
     // Wait for timezone to be loaded
     await waitFor(() => {

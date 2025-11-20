@@ -209,38 +209,37 @@ export default function BirthForm() {
             />
           </div>
 
-          {/* Date and Time of Birth - Side by side on larger screens, constrained width */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <label htmlFor="dateOfBirth" className="block text-sm sm:text-base font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Date of Birth <span className="text-red-500 dark:text-red-400">*</span>
-              </label>
-              <input
-                id="dateOfBirth"
-                type="date"
-                {...register('dateOfBirth', { required: 'Date of birth is required' })}
-                className="w-full px-4 py-3 text-base bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 focus:border-transparent outline-none transition min-h-[44px] sm:min-h-[48px]"
-              />
-              {errors.dateOfBirth && (
-                <p className="mt-2 text-sm text-red-600 dark:text-red-400">{errors.dateOfBirth.message}</p>
-              )}
-            </div>
+          {/* Date of Birth */}
+          <div>
+            <label htmlFor="dateOfBirth" className="block text-sm sm:text-base font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Date of Birth <span className="text-red-500 dark:text-red-400">*</span>
+            </label>
+            <input
+              id="dateOfBirth"
+              type="date"
+              {...register('dateOfBirth', { required: 'Date of birth is required' })}
+              className="w-full px-4 py-3 text-base bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 focus:border-transparent outline-none transition min-h-[44px] sm:min-h-[48px]"
+            />
+            {errors.dateOfBirth && (
+              <p className="mt-2 text-sm text-red-600 dark:text-red-400">{errors.dateOfBirth.message}</p>
+            )}
+          </div>
 
-            <div>
-              <label htmlFor="timeOfBirth" className="block text-sm sm:text-base font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Time of Birth <span className="text-red-500 dark:text-red-400">*</span>
-              </label>
-              <input
-                id="timeOfBirth"
-                type="time"
-                step="60"
-                {...register('timeOfBirth', { required: 'Time of birth is required' })}
-                className="w-full px-4 py-3 text-base bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 focus:border-transparent outline-none transition min-h-[44px] sm:min-h-[48px]"
-              />
-              {errors.timeOfBirth && (
-                <p className="mt-2 text-sm text-red-600 dark:text-red-400">{errors.timeOfBirth.message}</p>
-              )}
-            </div>
+          {/* Time of Birth */}
+          <div>
+            <label htmlFor="timeOfBirth" className="block text-sm sm:text-base font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Time of Birth <span className="text-red-500 dark:text-red-400">*</span>
+            </label>
+            <input
+              id="timeOfBirth"
+              type="time"
+              step="60"
+              {...register('timeOfBirth', { required: 'Time of birth is required' })}
+              className="w-full px-4 py-3 text-base bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 focus:border-transparent outline-none transition min-h-[44px] sm:min-h-[48px]"
+            />
+            {errors.timeOfBirth && (
+              <p className="mt-2 text-sm text-red-600 dark:text-red-400">{errors.timeOfBirth.message}</p>
+            )}
           </div>
 
           {/* Place of Birth with Autocomplete */}

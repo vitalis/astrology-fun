@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 
 interface BirthFormData {
@@ -34,6 +34,8 @@ export default function BirthForm() {
   const [placeSuggestions, setPlaceSuggestions] = useState<PlaceSuggestion[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [isLoadingSuggestions, setIsLoadingSuggestions] = useState(false);
+  const [apiError, setApiError] = useState<string | null>(null);
+  const abortControllerRef = useRef<AbortController | null>(null);
 
   const placeOfBirth = watch('placeOfBirth');
   const latitude = watch('latitude');
@@ -45,23 +47,51 @@ export default function BirthForm() {
     if (!placeOfBirth || placeOfBirth.length < 3) {
       setPlaceSuggestions([]);
       setShowSuggestions(false);
+      setApiError(null);
       return;
+    }
+
+    // Abort any previous request
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
     }
 
     // Set new timeout for debouncing
     const timeout = setTimeout(async () => {
+      // Create new abort controller for this request
+      abortControllerRef.current = new AbortController();
+
       setIsLoadingSuggestions(true);
+      setApiError(null);
+
       try {
         const response = await fetch(
           `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
             placeOfBirth
-          )}&limit=5&addressdetails=1`
+          )}&limit=5&addressdetails=1`,
+          {
+            headers: {
+              'User-Agent': 'Astrology-Fun-App/1.0 (Birth Chart Calculator)'
+            },
+            signal: abortControllerRef.current.signal
+          }
         );
+
+        if (!response.ok) {
+          throw new Error(`API returned ${response.status}`);
+        }
+
         const data = await response.json();
         setPlaceSuggestions(data);
         setShowSuggestions(true);
       } catch (error) {
+        // Don't show error if request was aborted
+        if (error instanceof Error && error.name === 'AbortError') {
+          return;
+        }
+
         console.error('Error fetching place suggestions:', error);
+        setApiError('Unable to fetch locations. Please try again.');
         setPlaceSuggestions([]);
       } finally {
         setIsLoadingSuggestions(false);
@@ -70,31 +100,83 @@ export default function BirthForm() {
 
     return () => {
       clearTimeout(timeout);
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort();
+      }
     };
   }, [placeOfBirth]);
 
-  // Calculate UTC offset based on latitude and longitude
-  const calculateUTCOffset = (_lat: number, lon: number): number => {
-    // Simple approximation: UTC offset = longitude / 15
-    // This is a rough estimate; for production, use a timezone API
-    const offset = Math.round(lon / 15);
-    return offset;
+  // Fetch accurate UTC offset from timezone API
+  const fetchUTCOffset = async (lat: number, lon: number): Promise<number> => {
+    try {
+      // Use TimeAPI.io free service for timezone lookup
+      const response = await fetch(
+        `https://timeapi.io/api/timezone/coordinate?latitude=${lat}&longitude=${lon}`,
+        {
+          headers: {
+            'Accept': 'application/json'
+          }
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error('Timezone API failed');
+      }
+
+      const data = await response.json();
+
+      // Extract UTC offset from the response
+      // TimeAPI returns currentUtcOffset in format like "+01:00" or "-05:00"
+      if (data.currentUtcOffset) {
+        const offsetString = data.currentUtcOffset.offset || data.currentUtcOffset;
+        const [hours, minutes] = offsetString.replace('+', '').split(':').map(Number);
+        const offsetHours = hours + (minutes / 60);
+        return offsetHours;
+      }
+
+      throw new Error('Invalid timezone data');
+    } catch (error) {
+      console.error('Error fetching timezone:', error);
+      // Fallback to rough approximation if API fails
+      const offset = Math.round(lon / 15);
+      return offset;
+    }
   };
 
-  const selectPlace = (place: PlaceSuggestion) => {
+  const selectPlace = async (place: PlaceSuggestion) => {
     const lat = parseFloat(place.lat);
     const lon = parseFloat(place.lon);
-    const offset = calculateUTCOffset(lat, lon);
 
     setValue('placeOfBirth', place.display_name);
     setValue('latitude', lat);
     setValue('longitude', lon);
-    setValue('utcOffset', offset);
     setShowSuggestions(false);
     setPlaceSuggestions([]);
+
+    // Fetch accurate timezone offset
+    setIsLoadingSuggestions(true);
+    setApiError(null);
+    try {
+      const offset = await fetchUTCOffset(lat, lon);
+      setValue('utcOffset', offset);
+    } catch (error) {
+      console.error('Error setting UTC offset:', error);
+      setApiError('Could not fetch timezone. Please try selecting the location again.');
+    } finally {
+      setIsLoadingSuggestions(false);
+    }
   };
 
   const onSubmit = (data: BirthFormData) => {
+    // Validate that location data is complete
+    if (data.latitude === null || data.longitude === null || data.utcOffset === null) {
+      setApiError('Please select a location from the suggestions to auto-fill coordinates and timezone.');
+      return;
+    }
+
+    // Clear any errors
+    setApiError(null);
+
     console.log('Form submitted:', data);
     alert(`Birth Chart Data:\n${JSON.stringify(data, null, 2)}`);
   };
@@ -174,6 +256,16 @@ export default function BirthForm() {
             />
             {errors.placeOfBirth && (
               <p className="mt-1 text-sm text-red-600">{errors.placeOfBirth.message}</p>
+            )}
+
+            {/* API Error Message */}
+            {apiError && (
+              <div className="mt-2 p-3 bg-red-50 border border-red-200 rounded-lg">
+                <p className="text-sm text-red-600 flex items-center">
+                  <span className="mr-2">⚠️</span>
+                  {apiError}
+                </p>
+              </div>
             )}
 
             {/* Autocomplete Suggestions Dropdown */}

@@ -13,25 +13,25 @@
     "test:run": "vitest run"
   },
   "dependencies": {
-    "@sveltejs/kit": "^2.8.0"
+    "@sveltejs/kit": "^2.48.6"
   },
   "devDependencies": {
     "@sveltejs/adapter-static": "^3.0.6",
-    "@sveltejs/vite-plugin-svelte": "^5.0.4",
+    "@sveltejs/vite-plugin-svelte": "^6.2.1",
     "@tailwindcss/vite": "^4.1.17",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/svelte": "^5.2.6",
     "@testing-library/user-event": "^14.5.2",
-    "@types/node": "^22.10.1",
-    "@vitest/coverage-v8": "^2.1.8",
+    "@types/node": "^24.10.1",
+    "@vitest/coverage-v8": "^4.0.12",
     "eslint": "^9.15.0",
-    "jsdom": "^25.0.1",
-    "svelte": "^5.2.9",
+    "jsdom": "^27.2.0",
+    "svelte": "^5.43.13",
     "svelte-check": "^4.0.9",
     "tailwindcss": "^4.1.17",
     "tslib": "^2.8.1",
-    "typescript": "~5.6.3",
-    "vite": "^6.0.3",
-    "vitest": "^2.1.8"
+    "typescript": "^5.9.3",
+    "vite": "^7.2.4",
+    "vitest": "^4.0.12"
   }
 }

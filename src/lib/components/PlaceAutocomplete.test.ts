@@ -3,9 +3,11 @@ import { render, screen, waitFor } from '@testing-library/svelte';
 import userEvent from '@testing-library/user-event';
 import PlaceAutocomplete from './PlaceAutocomplete.svelte';
 
+type MockFetch = ReturnType<typeof vi.fn>;
+
 describe('PlaceAutocomplete', () => {
 	beforeEach(() => {
-		global.fetch = vi.fn();
+		global.fetch = vi.fn() as MockFetch;
 	});
 
 	afterEach(() => {
@@ -64,7 +66,7 @@ describe('PlaceAutocomplete', () => {
 			}
 		];
 
-		(global.fetch as any).mockResolvedValueOnce({
+		(global.fetch as MockFetch).mockResolvedValueOnce({
 			ok: true,
 			json: async () => mockResponse
 		});
@@ -111,7 +113,7 @@ describe('PlaceAutocomplete', () => {
 			}
 		];
 
-		(global.fetch as any).mockResolvedValueOnce({
+		(global.fetch as MockFetch).mockResolvedValueOnce({
 			ok: true,
 			json: async () => mockResponse
 		});
@@ -134,7 +136,7 @@ describe('PlaceAutocomplete', () => {
 		vi.useFakeTimers();
 		const user = userEvent.setup({ delay: null });
 
-		(global.fetch as any).mockResolvedValueOnce({
+		(global.fetch as MockFetch).mockResolvedValueOnce({
 			ok: true,
 			json: async () => []
 		});
@@ -165,7 +167,7 @@ describe('PlaceAutocomplete', () => {
 			}
 		];
 
-		(global.fetch as any).mockResolvedValueOnce({
+		(global.fetch as MockFetch).mockResolvedValueOnce({
 			ok: true,
 			json: async () => mockResponse
 		});
@@ -205,7 +207,7 @@ describe('PlaceAutocomplete', () => {
 		vi.useFakeTimers();
 		const user = userEvent.setup({ delay: null });
 
-		(global.fetch as any).mockRejectedValueOnce(new Error('Network error'));
+		(global.fetch as MockFetch).mockRejectedValueOnce(new Error('Network error'));
 
 		// Track the error event
 		const onerror = vi.fn();
@@ -227,7 +229,7 @@ describe('PlaceAutocomplete', () => {
 		vi.useFakeTimers();
 		const user = userEvent.setup({ delay: null });
 
-		(global.fetch as any).mockResolvedValueOnce({
+		(global.fetch as MockFetch).mockResolvedValueOnce({
 			ok: false,
 			status: 500
 		});

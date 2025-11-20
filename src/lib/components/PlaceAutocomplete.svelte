@@ -120,7 +120,7 @@
 					Searching...
 				</div>
 			{:else if placeSuggestions.length > 0}
-				{#each placeSuggestions as place}
+				{#each placeSuggestions as place (place.display_name)}
 					<button
 						type="button"
 						onclick={() => selectPlace(place)}

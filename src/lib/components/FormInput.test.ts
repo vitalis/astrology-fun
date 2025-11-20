@@ -59,7 +59,7 @@ describe('FormInput', () => {
 
 	it('accepts user input', async () => {
 		const user = userEvent.setup();
-		const { component } = render(FormInput, {
+		render(FormInput, {
 			props: {
 				id: 'test',
 				label: 'Name',

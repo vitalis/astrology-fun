@@ -3,13 +3,15 @@ import { render, screen } from '@testing-library/svelte';
 import userEvent from '@testing-library/user-event';
 import BirthForm from './BirthForm.svelte';
 
+type MockFetch = ReturnType<typeof vi.fn>;
+
 // Mock fetch
-global.fetch = vi.fn();
+global.fetch = vi.fn() as MockFetch;
 
 describe('BirthForm', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    (global.fetch as any).mockReset();
+    (global.fetch as MockFetch).mockReset();
   });
 
   afterEach(() => {

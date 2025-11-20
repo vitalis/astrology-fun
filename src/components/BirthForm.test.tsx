@@ -3,6 +3,9 @@ import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import BirthForm from './BirthForm';
 
+// Mock window.alert
+vi.stubGlobal('alert', vi.fn());
+
 // Mock fetch for place autocomplete
 const mockFetch = vi.fn();
 global.fetch = mockFetch;
@@ -15,24 +18,20 @@ describe('BirthForm', () => {
   it('renders all form fields', () => {
     render(<BirthForm />);
 
-    expect(screen.getByLabelText(/name/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/date of birth/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/time of birth/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/place of birth/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/latitude/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/longitude/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/utc offset/i)).toBeInTheDocument();
+    expect(screen.getByPlaceholderText(/enter your name/i)).toBeInTheDocument();
+    expect(screen.getByText('Date of Birth')).toBeInTheDocument();
+    expect(screen.getByText('Time of Birth')).toBeInTheDocument();
+    expect(screen.getByPlaceholderText(/start typing a city/i)).toBeInTheDocument();
+    expect(screen.getByText('Latitude')).toBeInTheDocument();
+    expect(screen.getByText('Longitude')).toBeInTheDocument();
+    expect(screen.getByText('UTC Offset')).toBeInTheDocument();
   });
 
-  it('renders the header with title and description', () => {
+  it('renders the header with title and subtitle', () => {
     render(<BirthForm />);
 
-    // Check for title by looking at the h1 element
-    const heading = screen.getByRole('heading', { level: 1 });
-    expect(heading.textContent).toContain('Birth Chart');
-    expect(heading.textContent).toContain('Calculator');
-
-    expect(screen.getByText(/discover the cosmic blueprint/i)).toBeInTheDocument();
+    expect(screen.getByText('Birth Chart')).toBeInTheDocument();
+    expect(screen.getByText('Calculate Your Cosmic Blueprint')).toBeInTheDocument();
   });
 
   it('renders submit button', () => {
@@ -59,7 +58,7 @@ describe('BirthForm', () => {
     const user = userEvent.setup();
     render(<BirthForm />);
 
-    const nameInput = screen.getByLabelText(/name/i);
+    const nameInput = screen.getByPlaceholderText(/enter your name/i);
     await user.type(nameInput, 'John Doe');
 
     expect(nameInput).toHaveValue('John Doe');
@@ -103,7 +102,7 @@ describe('BirthForm', () => {
 
     render(<BirthForm />);
 
-    const placeInput = screen.getByLabelText(/place of birth/i);
+    const placeInput = screen.getByPlaceholderText(/start typing a city/i);
     await user.type(placeInput, 'New York');
 
     await waitFor(() => {
@@ -139,7 +138,7 @@ describe('BirthForm', () => {
 
     render(<BirthForm />);
 
-    const placeInput = screen.getByLabelText(/place of birth/i);
+    const placeInput = screen.getByPlaceholderText(/start typing a city/i);
     await user.type(placeInput, 'New York');
 
     await waitFor(() => {
@@ -150,13 +149,13 @@ describe('BirthForm', () => {
     await user.click(suggestion);
 
     await waitFor(() => {
-      const latInput = screen.getByLabelText(/latitude/i);
-      const lonInput = screen.getByLabelText(/longitude/i);
-      const utcInput = screen.getByLabelText(/utc offset/i);
+      const latInput = screen.getByLabelText(/latitude/i) as HTMLInputElement;
+      const lonInput = screen.getByLabelText(/longitude/i) as HTMLInputElement;
+      const utcInput = screen.getByLabelText(/utc offset/i) as HTMLInputElement;
 
-      expect(latInput).toHaveValue('40.712800');
-      expect(lonInput).toHaveValue('-74.006000');
-      expect(utcInput).toHaveValue('UTC -5');
+      expect(latInput.value).toBe('40.712800');
+      expect(lonInput.value).toBe('-74.006000');
+      expect(utcInput.value).toBe('UTC -5');
     });
   });
 
@@ -164,7 +163,7 @@ describe('BirthForm', () => {
     const user = userEvent.setup();
     render(<BirthForm />);
 
-    const placeInput = screen.getByLabelText(/place of birth/i);
+    const placeInput = screen.getByPlaceholderText(/start typing a city/i);
     await user.type(placeInput, 'Ne');
 
     await waitFor(() => {
@@ -182,7 +181,7 @@ describe('BirthForm', () => {
 
     render(<BirthForm />);
 
-    const placeInput = screen.getByLabelText(/place of birth/i);
+    const placeInput = screen.getByPlaceholderText(/start typing a city/i);
     await user.type(placeInput, 'XYZ123');
 
     await waitFor(() => {
@@ -204,7 +203,7 @@ describe('BirthForm', () => {
 
   it('submits form with valid data', async () => {
     const user = userEvent.setup();
-    const alertSpy = vi.spyOn(window, 'alert').mockImplementation(() => {});
+    const alertMock = vi.mocked(window.alert);
 
     const mockPlaces = [
       {
@@ -232,11 +231,11 @@ describe('BirthForm', () => {
     render(<BirthForm />);
 
     // Fill in all required fields
-    await user.type(screen.getByLabelText(/name/i), 'Jane Smith');
+    await user.type(screen.getByPlaceholderText(/enter your name/i), 'Jane Smith');
     await user.type(screen.getByLabelText(/date of birth/i), '1985-03-20');
     await user.type(screen.getByLabelText(/time of birth/i), '08:45');
 
-    const placeInput = screen.getByLabelText(/place of birth/i);
+    const placeInput = screen.getByPlaceholderText(/start typing a city/i);
     await user.type(placeInput, 'London');
 
     await waitFor(() => {
@@ -247,8 +246,8 @@ describe('BirthForm', () => {
 
     // Wait for timezone to be loaded
     await waitFor(() => {
-      const utcInput = screen.getByLabelText(/utc offset/i);
-      expect(utcInput).toHaveValue('UTC +0');
+      const utcInput = screen.getByLabelText(/utc offset/i) as HTMLInputElement;
+      expect(utcInput.value).toBe('UTC +0');
     });
 
     // Submit the form
@@ -256,24 +255,14 @@ describe('BirthForm', () => {
     await user.click(submitButton);
 
     await waitFor(() => {
-      expect(alertSpy).toHaveBeenCalled();
+      expect(alertMock).toHaveBeenCalled();
     });
-
-    alertSpy.mockRestore();
   });
 
   it('name field is marked as optional', () => {
     render(<BirthForm />);
 
-    const nameLabel = screen.getByText(/name/i);
-    expect(nameLabel.textContent).toMatch(/optional/i);
-  });
-
-  it('required fields are marked with asterisk', () => {
-    render(<BirthForm />);
-
-    // Check that required fields have asterisks
-    const labels = screen.getAllByText('*');
-    expect(labels.length).toBeGreaterThanOrEqual(3); // At least 3 required fields
+    const nameInput = screen.getByPlaceholderText(/enter your name \(optional\)/i);
+    expect(nameInput).toBeInTheDocument();
   });
 });

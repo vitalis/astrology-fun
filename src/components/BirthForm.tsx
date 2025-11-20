@@ -1,5 +1,14 @@
 import { useState, useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
+import {
+  Page,
+  Navbar,
+  Block,
+  List,
+  ListInput,
+  Button,
+  BlockTitle,
+} from 'konsta/react';
 
 interface BirthFormData {
   name?: string;
@@ -182,147 +191,89 @@ export default function BirthForm() {
   };
 
   return (
-    <div className="w-full max-w-2xl mx-auto relative z-10">
-      {/* Decorative elements */}
-      <div className="absolute -top-10 -left-10 w-40 h-40 bg-purple-500/10 rounded-full blur-3xl"></div>
-      <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-pink-500/10 rounded-full blur-3xl"></div>
+    <Page className="select-none">
+      <Navbar
+        title="Birth Chart"
+        subtitle="Calculate Your Cosmic Blueprint"
+        className="select-none"
+      />
 
-      <div className="relative bg-white rounded-2xl sm:rounded-3xl shadow-2xl overflow-hidden border border-white/20">
-        {/* Subtle gradient overlay at top */}
-        <div className="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-purple-500 via-pink-500 to-indigo-500"></div>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        {/* Basic Information Section */}
+        <BlockTitle className="select-none">Personal Information</BlockTitle>
+        <List strongIos insetIos className="select-none">
+          <ListInput
+            label="Name"
+            type="text"
+            placeholder="Enter your name (optional)"
+            {...register('name')}
+            floatingLabel
+            outline
+            clearButton
+            className="select-none outline-none"
+          />
 
-        <div className="p-6 sm:p-8 md:p-10">
-          {/* Header */}
-          <div className="text-center mb-8 sm:mb-10">
-            <div className="mb-4 sm:mb-5 relative inline-block">
-              <div className="absolute inset-0 animate-pulse bg-purple-500/20 blur-2xl rounded-full"></div>
-              <span className="relative text-5xl sm:text-6xl md:text-7xl">✨</span>
-            </div>
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold mb-3">
-              <span className="bg-gradient-to-r from-purple-600 via-pink-600 to-indigo-600 bg-clip-text text-transparent">
-                Birth Chart
-              </span>
-              <br />
-              <span className="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
-                Calculator
-              </span>
-            </h1>
-            <p className="text-base sm:text-lg text-gray-600 max-w-md mx-auto">
-              Discover the cosmic blueprint of your life
-            </p>
-          </div>
+          <ListInput
+            label="Date of Birth"
+            type="date"
+            {...register('dateOfBirth', { required: 'Date of birth is required' })}
+            floatingLabel
+            outline
+            className="select-none outline-none"
+            error={errors.dateOfBirth?.message}
+          />
 
-        {/* Form */}
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-5 sm:space-y-6">
-          {/* Name Field (Optional) */}
-          <div className="group">
-            <label htmlFor="name" className="block text-sm sm:text-base font-semibold text-gray-800 mb-2">
-              Name <span className="text-gray-400 font-medium text-sm">(optional)</span>
-            </label>
-            <input
-              id="name"
+          <ListInput
+            label="Time of Birth"
+            type="time"
+            {...register('timeOfBirth', { required: 'Time of birth is required' })}
+            floatingLabel
+            outline
+            className="select-none outline-none"
+            error={errors.timeOfBirth?.message}
+          />
+        </List>
+
+        {/* Location Section */}
+        <BlockTitle className="select-none">Birth Location</BlockTitle>
+        <List strongIos insetIos className="select-none">
+          <div className="relative">
+            <ListInput
+              label="Place of Birth"
               type="text"
-              {...register('name')}
-              className="w-full px-4 py-3.5 text-base border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:ring-4 focus:ring-purple-100 outline-none transition-all duration-200 hover:border-gray-300 bg-white"
-              placeholder="Enter your name"
+              placeholder="Start typing a city..."
+              {...register('placeOfBirth', { required: 'Place of birth is required' })}
+              floatingLabel
+              outline
+              clearButton
+              autoComplete="off"
+              className="select-none outline-none"
+              error={errors.placeOfBirth?.message}
             />
-          </div>
-
-          {/* Date of Birth (Required) */}
-          <div className="group">
-            <label htmlFor="dateOfBirth" className="block text-sm sm:text-base font-semibold text-gray-800 mb-2">
-              Date of Birth <span className="text-pink-500 font-bold">*</span>
-            </label>
-            <input
-              id="dateOfBirth"
-              type="date"
-              {...register('dateOfBirth', { required: 'Date of birth is required' })}
-              className="w-full px-4 py-3.5 text-base border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:ring-4 focus:ring-purple-100 outline-none transition-all duration-200 hover:border-gray-300 bg-white"
-            />
-            {errors.dateOfBirth && (
-              <p className="mt-2 text-sm text-red-600 flex items-center gap-1">
-                <span>⚠️</span>
-                {errors.dateOfBirth.message}
-              </p>
-            )}
-          </div>
-
-          {/* Time of Birth (Required) */}
-          <div className="group">
-            <label htmlFor="timeOfBirth" className="block text-sm sm:text-base font-semibold text-gray-800 mb-2">
-              Time of Birth <span className="text-pink-500 font-bold">*</span>
-            </label>
-            <input
-              id="timeOfBirth"
-              type="time"
-              step="60"
-              {...register('timeOfBirth', { required: 'Time of birth is required' })}
-              className="w-full px-4 py-3.5 text-base border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:ring-4 focus:ring-purple-100 outline-none transition-all duration-200 hover:border-gray-300 bg-white"
-            />
-            {errors.timeOfBirth && (
-              <p className="mt-2 text-sm text-red-600 flex items-center gap-1">
-                <span>⚠️</span>
-                {errors.timeOfBirth.message}
-              </p>
-            )}
-          </div>
-
-          {/* Place of Birth with Autocomplete (Required) */}
-          <div className="relative group">
-            <label htmlFor="placeOfBirth" className="block text-sm sm:text-base font-semibold text-gray-800 mb-2">
-              Place of Birth <span className="text-pink-500 font-bold">*</span>
-            </label>
-            <div className="relative">
-              <input
-                id="placeOfBirth"
-                type="text"
-                {...register('placeOfBirth', { required: 'Place of birth is required' })}
-                className="w-full px-4 py-3.5 text-base border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:ring-4 focus:ring-purple-100 outline-none transition-all duration-200 hover:border-gray-300 bg-white pr-10"
-                placeholder="Start typing a city..."
-                autoComplete="off"
-              />
-              <div className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400">
-                🌍
-              </div>
-            </div>
-            {errors.placeOfBirth && (
-              <p className="mt-2 text-sm text-red-600 flex items-center gap-1">
-                <span>⚠️</span>
-                {errors.placeOfBirth.message}
-              </p>
-            )}
-
-            {/* API Error Message */}
-            {apiError && (
-              <div className="mt-3 p-3 bg-red-50 border-2 border-red-200 rounded-xl">
-                <p className="text-sm text-red-600 flex items-center gap-2">
-                  <span className="text-lg">⚠️</span>
-                  <span className="flex-1">{apiError}</span>
-                </p>
-              </div>
-            )}
 
             {/* Autocomplete Suggestions Dropdown */}
             {showSuggestions && (
-              <div className="absolute z-20 w-full mt-2 bg-white border-2 border-purple-200 rounded-xl shadow-2xl max-h-56 overflow-y-auto">
+              <div className="absolute z-50 left-4 right-4 mt-1 bg-white rounded-xl shadow-2xl max-h-64 overflow-y-auto border border-gray-200">
                 {isLoadingSuggestions ? (
                   <div className="px-4 py-4 text-gray-500 text-center">
-                    <div className="animate-spin inline-block w-5 h-5 border-2 border-purple-600 border-t-transparent rounded-full"></div>
+                    <div className="animate-spin inline-block w-5 h-5 border-2 border-blue-600 border-t-transparent rounded-full"></div>
                     <span className="ml-2 text-sm">Searching...</span>
                   </div>
                 ) : placeSuggestions.length > 0 ? (
-                  placeSuggestions.map((place, index) => (
-                    <button
-                      key={index}
-                      type="button"
-                      onClick={() => selectPlace(place)}
-                      className="w-full text-left px-4 py-3 hover:bg-gradient-to-r hover:from-purple-50 hover:to-pink-50 active:from-purple-100 active:to-pink-100 transition-all duration-200 border-b border-gray-100 last:border-b-0 group/item"
-                    >
-                      <div className="font-medium text-gray-800 text-sm group-hover/item:text-purple-600 transition-colors">
-                        📍 {place.display_name}
-                      </div>
-                    </button>
-                  ))
+                  <div className="divide-y divide-gray-100">
+                    {placeSuggestions.map((place, index) => (
+                      <button
+                        key={index}
+                        type="button"
+                        onClick={() => selectPlace(place)}
+                        className="w-full text-left px-4 py-3 hover:bg-gray-50 active:bg-gray-100 transition-colors"
+                      >
+                        <div className="text-sm text-gray-800">
+                          📍 {place.display_name}
+                        </div>
+                      </button>
+                    ))}
+                  </div>
                 ) : (
                   <div className="px-4 py-4 text-gray-500 text-center text-sm">
                     No locations found
@@ -331,86 +282,76 @@ export default function BirthForm() {
               </div>
             )}
           </div>
+        </List>
 
-          {/* Coordinates Section */}
-          <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl p-4 sm:p-5 border-2 border-purple-100">
-            <div className="flex items-center gap-2 mb-4">
-              <span className="text-lg">🗺️</span>
-              <h3 className="text-sm font-semibold text-gray-700">Location Coordinates</h3>
+        {/* API Error Message */}
+        {apiError && (
+          <Block className="select-none">
+            <div className="bg-red-50 border border-red-200 rounded-xl p-3">
+              <p className="text-sm text-red-600 flex items-center gap-2">
+                <span>⚠️</span>
+                <span className="flex-1">{apiError}</span>
+              </p>
             </div>
+          </Block>
+        )}
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {/* Latitude (Read-only) */}
-              <div>
-                <label htmlFor="latitude" className="block text-sm font-medium text-gray-700 mb-1.5">
-                  Latitude
-                </label>
-                <input
-                  id="latitude"
-                  type="text"
-                  value={latitude !== null && latitude !== undefined ? latitude.toFixed(6) : ''}
-                  readOnly
-                  className="w-full px-3 py-2.5 text-sm border-2 border-purple-200 rounded-lg bg-white text-gray-700 cursor-not-allowed focus:outline-none"
-                  placeholder="Auto-filled"
-                />
-              </div>
+        {/* Coordinates Section (Read-only) */}
+        <BlockTitle className="select-none">Coordinates (Auto-filled)</BlockTitle>
+        <List strongIos insetIos className="select-none">
+          <ListInput
+            label="Latitude"
+            type="text"
+            value={latitude !== null && latitude !== undefined ? latitude.toFixed(6) : ''}
+            readOnly
+            disabled
+            floatingLabel
+            outline
+            className="select-none outline-none"
+          />
 
-              {/* Longitude (Read-only) */}
-              <div>
-                <label htmlFor="longitude" className="block text-sm font-medium text-gray-700 mb-1.5">
-                  Longitude
-                </label>
-                <input
-                  id="longitude"
-                  type="text"
-                  value={longitude !== null && longitude !== undefined ? longitude.toFixed(6) : ''}
-                  readOnly
-                  className="w-full px-3 py-2.5 text-sm border-2 border-purple-200 rounded-lg bg-white text-gray-700 cursor-not-allowed focus:outline-none"
-                  placeholder="Auto-filled"
-                />
-              </div>
-            </div>
+          <ListInput
+            label="Longitude"
+            type="text"
+            value={longitude !== null && longitude !== undefined ? longitude.toFixed(6) : ''}
+            readOnly
+            disabled
+            floatingLabel
+            outline
+            className="select-none outline-none"
+          />
 
-            {/* UTC Offset (Read-only) */}
-            <div className="mt-4">
-              <label htmlFor="utcOffset" className="block text-sm font-medium text-gray-700 mb-1.5">
-                UTC Offset
-              </label>
-              <input
-                id="utcOffset"
-                type="text"
-                value={utcOffset !== null && utcOffset !== undefined ? `UTC ${utcOffset >= 0 ? '+' : ''}${utcOffset}` : ''}
-                readOnly
-                className="w-full px-3 py-2.5 text-sm border-2 border-purple-200 rounded-lg bg-white text-gray-700 cursor-not-allowed focus:outline-none"
-                placeholder="Auto-filled"
-              />
-            </div>
-          </div>
+          <ListInput
+            label="UTC Offset"
+            type="text"
+            value={utcOffset !== null && utcOffset !== undefined ? `UTC ${utcOffset >= 0 ? '+' : ''}${utcOffset}` : ''}
+            readOnly
+            disabled
+            floatingLabel
+            outline
+            className="select-none outline-none"
+          />
+        </List>
 
-          {/* Submit Button */}
-          <div className="pt-4">
-            <button
-              type="submit"
-              className="group relative w-full bg-gradient-to-r from-purple-600 via-pink-600 to-indigo-600 text-white font-bold py-4 px-6 text-base sm:text-lg rounded-xl hover:shadow-2xl hover:shadow-purple-500/50 active:scale-[0.98] transition-all duration-300 overflow-hidden"
-            >
-              {/* Animated gradient overlay */}
-              <div className="absolute inset-0 bg-gradient-to-r from-purple-700 via-pink-700 to-indigo-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+        {/* Submit Button */}
+        <Block className="space-y-4 select-none">
+          <Button
+            type="submit"
+            rounded
+            large
+            className="select-none outline-none"
+          >
+            <span className="flex items-center justify-center gap-2">
+              <span>Generate Birth Chart</span>
+              <span className="text-xl">✨</span>
+            </span>
+          </Button>
 
-              {/* Button content */}
-              <span className="relative inline-flex items-center justify-center gap-3">
-                <span>Generate Birth Chart</span>
-                <span className="text-2xl animate-pulse">✨</span>
-              </span>
-            </button>
-
-            {/* Helper text */}
-            <p className="text-center text-xs sm:text-sm text-gray-500 mt-4">
-              Your privacy is protected. Data is processed locally.
-            </p>
-          </div>
-        </form>
-        </div>
-      </div>
-    </div>
+          <p className="text-center text-xs text-gray-500">
+            Your privacy is protected. Data is processed locally.
+          </p>
+        </Block>
+      </form>
+    </Page>
   );
 }

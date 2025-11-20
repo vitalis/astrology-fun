@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "konsta/theme.css";
 
 * {
   -webkit-tap-highlight-color: transparent;

@@ -93,6 +93,7 @@ describe('BirthForm', () => {
     ];
 
     mockFetch.mockResolvedValueOnce({
+      ok: true,
       json: async () => mockPlaces,
     });
 
@@ -118,8 +119,18 @@ describe('BirthForm', () => {
       },
     ];
 
+    // Mock Nominatim API response
     mockFetch.mockResolvedValueOnce({
+      ok: true,
       json: async () => mockPlaces,
+    });
+
+    // Mock TimeAPI response
+    mockFetch.mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({
+        currentUtcOffset: { offset: '-05:00' }
+      }),
     });
 
     render(<BirthForm />);
@@ -161,6 +172,7 @@ describe('BirthForm', () => {
     const user = userEvent.setup();
 
     mockFetch.mockResolvedValueOnce({
+      ok: true,
       json: async () => [],
     });
 
@@ -199,8 +211,18 @@ describe('BirthForm', () => {
       },
     ];
 
+    // Mock Nominatim API response
     mockFetch.mockResolvedValueOnce({
+      ok: true,
       json: async () => mockPlaces,
+    });
+
+    // Mock TimeAPI response
+    mockFetch.mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({
+        currentUtcOffset: { offset: '-00:00' }
+      }),
     });
 
     render(<BirthForm />);
@@ -218,6 +240,12 @@ describe('BirthForm', () => {
     });
 
     await user.click(screen.getByText('London, UK'));
+
+    // Wait for timezone to be loaded
+    await waitFor(() => {
+      const utcInput = screen.getByLabelText(/utc offset/i);
+      expect(utcInput).toHaveValue('UTC +0');
+    });
 
     // Submit the form
     const submitButton = screen.getByRole('button', { name: /generate birth chart/i });

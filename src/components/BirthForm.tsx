@@ -183,84 +183,87 @@ export default function BirthForm() {
 
   return (
     <div className="max-w-2xl mx-auto">
-      <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
-        {/* Header */}
-        <div className="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 px-6 py-8 text-center">
-          <h1 className="text-3xl font-bold text-white mb-2">Birth Chart Calculator</h1>
-          <p className="text-indigo-100">Discover your cosmic blueprint</p>
+      {/* Glassmorphism Card - Responsive sizing */}
+      <div className="bg-white/20 backdrop-blur-lg rounded-2xl sm:rounded-3xl shadow-2xl border border-white/30 overflow-hidden">
+        {/* Header with responsive typography */}
+        <div className="bg-white/10 backdrop-blur-md px-4 sm:px-6 py-6 sm:py-8 text-center border-b border-white/20">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-2 drop-shadow-lg">
+            ✨ Birth Chart Calculator
+          </h1>
+          <p className="text-sm sm:text-base md:text-lg text-white/90">Discover your cosmic blueprint</p>
         </div>
 
-        {/* Form */}
-        <form onSubmit={handleSubmit(onSubmit)} className="p-6 space-y-6">
-          {/* Name Field */}
+        {/* Form - Responsive padding and spacing */}
+        <form onSubmit={handleSubmit(onSubmit)} className="p-4 sm:p-6 md:p-8 space-y-4 sm:space-y-5 md:space-y-6">
+          {/* Name Field - Touch-optimized with responsive sizing */}
           <div>
-            <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
-              Name <span className="text-gray-400 text-xs">(optional)</span>
+            <label htmlFor="name" className="block text-sm sm:text-base font-semibold text-white mb-2">
+              Name <span className="text-white/60 text-xs sm:text-sm font-normal">(optional)</span>
             </label>
             <input
               id="name"
               type="text"
               {...register('name')}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition"
+              className="w-full px-4 py-3 sm:py-3.5 md:py-4 text-base sm:text-lg bg-white/20 backdrop-blur-sm border border-white/30 rounded-xl text-white placeholder-white/50 focus:ring-2 focus:ring-white/50 focus:border-white/50 outline-none transition min-h-[44px] sm:min-h-[48px]"
               placeholder="Enter your name"
             />
           </div>
 
-          {/* Date of Birth */}
+          {/* Date of Birth - Touch-optimized */}
           <div>
-            <label htmlFor="dateOfBirth" className="block text-sm font-medium text-gray-700 mb-2">
-              Date of Birth <span className="text-red-500">*</span>
+            <label htmlFor="dateOfBirth" className="block text-sm sm:text-base font-semibold text-white mb-2">
+              Date of Birth <span className="text-yellow-300">*</span>
             </label>
             <input
               id="dateOfBirth"
               type="date"
               {...register('dateOfBirth', { required: 'Date of birth is required' })}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition"
+              className="w-full px-4 py-3 sm:py-3.5 md:py-4 text-base sm:text-lg bg-white/20 backdrop-blur-sm border border-white/30 rounded-xl text-white focus:ring-2 focus:ring-white/50 focus:border-white/50 outline-none transition min-h-[44px] sm:min-h-[48px]"
             />
             {errors.dateOfBirth && (
-              <p className="mt-1 text-sm text-red-600">{errors.dateOfBirth.message}</p>
+              <p className="mt-2 text-sm sm:text-base text-yellow-300 font-medium">{errors.dateOfBirth.message}</p>
             )}
           </div>
 
-          {/* Time of Birth */}
+          {/* Time of Birth - Touch-optimized */}
           <div>
-            <label htmlFor="timeOfBirth" className="block text-sm font-medium text-gray-700 mb-2">
-              Time of Birth <span className="text-red-500">*</span>
+            <label htmlFor="timeOfBirth" className="block text-sm sm:text-base font-semibold text-white mb-2">
+              Time of Birth <span className="text-yellow-300">*</span>
             </label>
             <input
               id="timeOfBirth"
               type="time"
               step="60"
               {...register('timeOfBirth', { required: 'Time of birth is required' })}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition"
+              className="w-full px-4 py-3 sm:py-3.5 md:py-4 text-base sm:text-lg bg-white/20 backdrop-blur-sm border border-white/30 rounded-xl text-white focus:ring-2 focus:ring-white/50 focus:border-white/50 outline-none transition min-h-[44px] sm:min-h-[48px]"
             />
             {errors.timeOfBirth && (
-              <p className="mt-1 text-sm text-red-600">{errors.timeOfBirth.message}</p>
+              <p className="mt-2 text-sm sm:text-base text-yellow-300 font-medium">{errors.timeOfBirth.message}</p>
             )}
           </div>
 
-          {/* Place of Birth with Autocomplete */}
+          {/* Place of Birth with Autocomplete - Touch-optimized */}
           <div className="relative">
-            <label htmlFor="placeOfBirth" className="block text-sm font-medium text-gray-700 mb-2">
-              Place of Birth <span className="text-red-500">*</span>
+            <label htmlFor="placeOfBirth" className="block text-sm sm:text-base font-semibold text-white mb-2">
+              Place of Birth <span className="text-yellow-300">*</span>
             </label>
             <input
               id="placeOfBirth"
               type="text"
               {...register('placeOfBirth', { required: 'Place of birth is required' })}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition"
+              className="w-full px-4 py-3 sm:py-3.5 md:py-4 text-base sm:text-lg bg-white/20 backdrop-blur-sm border border-white/30 rounded-xl text-white placeholder-white/50 focus:ring-2 focus:ring-white/50 focus:border-white/50 outline-none transition min-h-[44px] sm:min-h-[48px]"
               placeholder="Start typing a city..."
               autoComplete="off"
             />
             {errors.placeOfBirth && (
-              <p className="mt-1 text-sm text-red-600">{errors.placeOfBirth.message}</p>
+              <p className="mt-2 text-sm sm:text-base text-yellow-300 font-medium">{errors.placeOfBirth.message}</p>
             )}
 
-            {/* Autocomplete Suggestions */}
+            {/* Autocomplete Suggestions with glass effect - Touch-optimized buttons */}
             {showSuggestions && (
-              <div className="absolute z-10 w-full mt-2 bg-white border border-gray-200 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+              <div className="absolute z-20 w-full mt-2 bg-white/90 backdrop-blur-md border border-white/40 rounded-xl shadow-2xl max-h-60 overflow-y-auto">
                 {isLoadingSuggestions ? (
-                  <div className="px-4 py-3 text-gray-500 text-center text-sm">
+                  <div className="px-4 py-3 sm:py-4 text-gray-700 text-center text-sm sm:text-base">
                     Searching...
                   </div>
                 ) : placeSuggestions.length > 0 ? (
@@ -269,13 +272,13 @@ export default function BirthForm() {
                       key={index}
                       type="button"
                       onClick={() => selectPlace(place)}
-                      className="w-full text-left px-4 py-3 hover:bg-purple-50 transition border-b last:border-b-0"
+                      className="w-full text-left px-4 py-3 sm:py-4 hover:bg-white/60 transition border-b border-white/30 last:border-b-0 min-h-[44px] sm:min-h-[48px]"
                     >
-                      <div className="text-sm text-gray-800">{place.display_name}</div>
+                      <div className="text-sm sm:text-base text-gray-800 font-medium">{place.display_name}</div>
                     </button>
                   ))
                 ) : (
-                  <div className="px-4 py-3 text-gray-500 text-center text-sm">
+                  <div className="px-4 py-3 sm:py-4 text-gray-700 text-center text-sm sm:text-base">
                     No locations found
                   </div>
                 )}
@@ -283,20 +286,20 @@ export default function BirthForm() {
             )}
           </div>
 
-          {/* API Error */}
+          {/* API Error - Responsive */}
           {apiError && (
-            <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
-              <p className="text-sm text-red-600">{apiError}</p>
+            <div className="p-3 sm:p-4 bg-yellow-400/20 backdrop-blur-sm border border-yellow-400/40 rounded-xl">
+              <p className="text-sm sm:text-base text-yellow-100 font-medium">{apiError}</p>
             </div>
           )}
 
-          {/* Coordinates Section */}
-          <div className="bg-gray-50 rounded-lg p-4 space-y-4">
-            <h3 className="text-sm font-medium text-gray-700">Coordinates (Auto-filled)</h3>
+          {/* Coordinates Section - Responsive with glass effect */}
+          <div className="bg-white/10 backdrop-blur-sm rounded-xl p-3 sm:p-4 space-y-3 sm:space-y-4 border border-white/20">
+            <h3 className="text-sm sm:text-base font-semibold text-white">📍 Coordinates (Auto-filled)</h3>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
               <div>
-                <label htmlFor="latitude" className="block text-xs text-gray-600 mb-1">
+                <label htmlFor="latitude" className="block text-xs sm:text-sm text-white/80 mb-1.5">
                   Latitude
                 </label>
                 <input
@@ -304,13 +307,13 @@ export default function BirthForm() {
                   type="text"
                   value={latitude !== null && latitude !== undefined ? latitude.toFixed(6) : ''}
                   readOnly
-                  className="w-full px-3 py-2 bg-white border border-gray-200 rounded text-sm text-gray-700"
+                  className="w-full px-3 py-2 sm:py-2.5 bg-white/10 border border-white/20 rounded-lg text-sm sm:text-base text-white/90 min-h-[40px]"
                   placeholder="Auto-filled"
                 />
               </div>
 
               <div>
-                <label htmlFor="longitude" className="block text-xs text-gray-600 mb-1">
+                <label htmlFor="longitude" className="block text-xs sm:text-sm text-white/80 mb-1.5">
                   Longitude
                 </label>
                 <input
@@ -318,14 +321,14 @@ export default function BirthForm() {
                   type="text"
                   value={longitude !== null && longitude !== undefined ? longitude.toFixed(6) : ''}
                   readOnly
-                  className="w-full px-3 py-2 bg-white border border-gray-200 rounded text-sm text-gray-700"
+                  className="w-full px-3 py-2 sm:py-2.5 bg-white/10 border border-white/20 rounded-lg text-sm sm:text-base text-white/90 min-h-[40px]"
                   placeholder="Auto-filled"
                 />
               </div>
             </div>
 
             <div>
-              <label htmlFor="utcOffset" className="block text-xs text-gray-600 mb-1">
+              <label htmlFor="utcOffset" className="block text-xs sm:text-sm text-white/80 mb-1.5">
                 UTC Offset
               </label>
               <input
@@ -333,22 +336,22 @@ export default function BirthForm() {
                 type="text"
                 value={utcOffset !== null && utcOffset !== undefined ? `UTC ${utcOffset >= 0 ? '+' : ''}${utcOffset}` : ''}
                 readOnly
-                className="w-full px-3 py-2 bg-white border border-gray-200 rounded text-sm text-gray-700"
+                className="w-full px-3 py-2 sm:py-2.5 bg-white/10 border border-white/20 rounded-lg text-sm sm:text-base text-white/90 min-h-[40px]"
                 placeholder="Auto-filled"
               />
             </div>
           </div>
 
-          {/* Submit Button */}
+          {/* Submit Button - Touch-optimized with responsive text */}
           <button
             type="submit"
-            className="w-full bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 text-white font-semibold py-4 px-6 rounded-lg hover:shadow-lg transition-all duration-200 transform hover:scale-[1.02]"
+            className="w-full bg-white/30 backdrop-blur-sm text-white font-bold py-3.5 sm:py-4 md:py-5 px-6 text-base sm:text-lg md:text-xl rounded-xl border-2 border-white/40 hover:bg-white/40 hover:shadow-2xl hover:shadow-white/20 transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] min-h-[48px] sm:min-h-[52px]"
           >
-            Generate Birth Chart
+            ✨ Generate Birth Chart ✨
           </button>
 
-          <p className="text-center text-xs text-gray-500">
-            Your privacy is protected. Data is processed locally.
+          <p className="text-center text-xs sm:text-sm text-white/80">
+            🔒 Your privacy is protected. Data is processed locally.
           </p>
         </form>
       </div>

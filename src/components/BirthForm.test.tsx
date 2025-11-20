@@ -17,7 +17,7 @@ describe('BirthForm', () => {
 
   it('renders form header', () => {
     render(<BirthForm />);
-    expect(screen.getByText('Birth Chart Calculator')).toBeInTheDocument();
+    expect(screen.getByText(/birth chart calculator/i)).toBeInTheDocument();
     expect(screen.getByText(/discover your cosmic blueprint/i)).toBeInTheDocument();
   });
 

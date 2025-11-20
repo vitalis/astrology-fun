@@ -23,6 +23,7 @@
     "@testing-library/svelte": "^5.2.6",
     "@testing-library/user-event": "^14.5.2",
     "@types/node": "^22.10.1",
+    "@vitest/coverage-v8": "^2.1.8",
     "eslint": "^9.15.0",
     "jsdom": "^25.0.1",
     "svelte": "^5.2.9",

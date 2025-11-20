@@ -1,22 +1,13 @@
-import { defineConfig } from 'vitest/config'
-import react from '@vitejs/plugin-react'
-import tailwindcss from '@tailwindcss/vite'
+import { sveltekit } from '@sveltejs/kit/vite';
+import tailwindcss from '@tailwindcss/vite';
+import { defineConfig } from 'vitest/config';
 
-// https://vite.dev/config/
 export default defineConfig({
-  plugins: [react(), tailwindcss()],
-  resolve: {
-    extensions: ['.js', '.jsx', '.ts', '.tsx', '.json'],
-  },
-  test: {
-    globals: true,
-    environment: 'jsdom',
-    setupFiles: './src/test/setup.ts',
-    css: true,
-    server: {
-      deps: {
-        inline: ['konsta'],
-      },
-    },
-  },
-})
+	plugins: [sveltekit(), tailwindcss()],
+	test: {
+		include: ['src/**/*.{test,spec}.{js,ts}'],
+		globals: true,
+		environment: 'jsdom',
+		setupFiles: './src/test/setup.ts'
+	}
+});

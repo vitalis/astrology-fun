@@ -182,51 +182,54 @@ export default function BirthForm() {
   };
 
   return (
-    <div className="w-full max-w-2xl mx-auto p-6">
-      <div className="bg-white rounded-2xl shadow-2xl p-8">
+    <div className="w-full max-w-2xl mx-auto px-4 py-4 sm:px-6 sm:py-6 md:px-8 md:py-8">
+      <div className="bg-white/95 backdrop-blur-sm rounded-xl sm:rounded-2xl shadow-xl sm:shadow-2xl p-4 sm:p-6 md:p-8">
         {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-indigo-600 mb-2">
-            ✨ Birth Chart Calculator
+        <div className="text-center mb-6 sm:mb-8">
+          <div className="mb-3 sm:mb-4">
+            <span className="text-4xl sm:text-5xl md:text-6xl">✨</span>
+          </div>
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-indigo-600 mb-2">
+            Birth Chart Calculator
           </h1>
-          <p className="text-gray-600">Enter your birth details to generate your astrological chart</p>
+          <p className="text-sm sm:text-base text-gray-600 px-2">Enter your birth details to generate your astrological chart</p>
         </div>
 
         {/* Form */}
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 sm:space-y-5">
           {/* Name Field (Optional) */}
           <div>
-            <label htmlFor="name" className="block text-sm font-semibold text-gray-700 mb-2">
-              Name <span className="text-gray-400 font-normal">(optional)</span>
+            <label htmlFor="name" className="block text-xs sm:text-sm font-semibold text-gray-700 mb-1.5 sm:mb-2">
+              Name <span className="text-gray-400 font-normal text-xs">(optional)</span>
             </label>
             <input
               id="name"
               type="text"
               {...register('name')}
-              className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-purple-500 focus:ring-2 focus:ring-purple-200 outline-none transition-all duration-200"
+              className="w-full px-3 py-2.5 sm:px-4 sm:py-3 text-sm sm:text-base border-2 border-gray-200 rounded-lg focus:border-purple-500 focus:ring-2 focus:ring-purple-200 outline-none transition-all duration-200"
               placeholder="Enter your name"
             />
           </div>
 
           {/* Date of Birth (Required) */}
           <div>
-            <label htmlFor="dateOfBirth" className="block text-sm font-semibold text-gray-700 mb-2">
+            <label htmlFor="dateOfBirth" className="block text-xs sm:text-sm font-semibold text-gray-700 mb-1.5 sm:mb-2">
               Date of Birth <span className="text-red-500">*</span>
             </label>
             <input
               id="dateOfBirth"
               type="date"
               {...register('dateOfBirth', { required: 'Date of birth is required' })}
-              className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-purple-500 focus:ring-2 focus:ring-purple-200 outline-none transition-all duration-200"
+              className="w-full px-3 py-2.5 sm:px-4 sm:py-3 text-sm sm:text-base border-2 border-gray-200 rounded-lg focus:border-purple-500 focus:ring-2 focus:ring-purple-200 outline-none transition-all duration-200"
             />
             {errors.dateOfBirth && (
-              <p className="mt-1 text-sm text-red-600">{errors.dateOfBirth.message}</p>
+              <p className="mt-1 text-xs sm:text-sm text-red-600">{errors.dateOfBirth.message}</p>
             )}
           </div>
 
           {/* Time of Birth (Required) */}
           <div>
-            <label htmlFor="timeOfBirth" className="block text-sm font-semibold text-gray-700 mb-2">
+            <label htmlFor="timeOfBirth" className="block text-xs sm:text-sm font-semibold text-gray-700 mb-1.5 sm:mb-2">
               Time of Birth <span className="text-red-500">*</span>
             </label>
             <input
@@ -234,47 +237,47 @@ export default function BirthForm() {
               type="time"
               step="60"
               {...register('timeOfBirth', { required: 'Time of birth is required' })}
-              className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-purple-500 focus:ring-2 focus:ring-purple-200 outline-none transition-all duration-200"
+              className="w-full px-3 py-2.5 sm:px-4 sm:py-3 text-sm sm:text-base border-2 border-gray-200 rounded-lg focus:border-purple-500 focus:ring-2 focus:ring-purple-200 outline-none transition-all duration-200"
             />
             {errors.timeOfBirth && (
-              <p className="mt-1 text-sm text-red-600">{errors.timeOfBirth.message}</p>
+              <p className="mt-1 text-xs sm:text-sm text-red-600">{errors.timeOfBirth.message}</p>
             )}
           </div>
 
           {/* Place of Birth with Autocomplete (Required) */}
           <div className="relative">
-            <label htmlFor="placeOfBirth" className="block text-sm font-semibold text-gray-700 mb-2">
+            <label htmlFor="placeOfBirth" className="block text-xs sm:text-sm font-semibold text-gray-700 mb-1.5 sm:mb-2">
               Place of Birth <span className="text-red-500">*</span>
             </label>
             <input
               id="placeOfBirth"
               type="text"
               {...register('placeOfBirth', { required: 'Place of birth is required' })}
-              className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-purple-500 focus:ring-2 focus:ring-purple-200 outline-none transition-all duration-200"
-              placeholder="Start typing a city or location..."
+              className="w-full px-3 py-2.5 sm:px-4 sm:py-3 text-sm sm:text-base border-2 border-gray-200 rounded-lg focus:border-purple-500 focus:ring-2 focus:ring-purple-200 outline-none transition-all duration-200"
+              placeholder="Start typing a city..."
               autoComplete="off"
             />
             {errors.placeOfBirth && (
-              <p className="mt-1 text-sm text-red-600">{errors.placeOfBirth.message}</p>
+              <p className="mt-1 text-xs sm:text-sm text-red-600">{errors.placeOfBirth.message}</p>
             )}
 
             {/* API Error Message */}
             {apiError && (
-              <div className="mt-2 p-3 bg-red-50 border border-red-200 rounded-lg">
-                <p className="text-sm text-red-600 flex items-center">
-                  <span className="mr-2">⚠️</span>
-                  {apiError}
+              <div className="mt-2 p-2.5 sm:p-3 bg-red-50 border border-red-200 rounded-lg">
+                <p className="text-xs sm:text-sm text-red-600 flex items-center">
+                  <span className="mr-2 text-base">⚠️</span>
+                  <span className="flex-1">{apiError}</span>
                 </p>
               </div>
             )}
 
             {/* Autocomplete Suggestions Dropdown */}
             {showSuggestions && (
-              <div className="absolute z-10 w-full mt-1 bg-white border-2 border-gray-200 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+              <div className="absolute z-10 w-full mt-1 bg-white border-2 border-gray-200 rounded-lg shadow-lg max-h-48 sm:max-h-60 overflow-y-auto">
                 {isLoadingSuggestions ? (
-                  <div className="px-4 py-3 text-gray-500 text-center">
-                    <div className="animate-spin inline-block w-5 h-5 border-2 border-purple-600 border-t-transparent rounded-full"></div>
-                    <span className="ml-2">Searching...</span>
+                  <div className="px-3 py-2.5 sm:px-4 sm:py-3 text-gray-500 text-center">
+                    <div className="animate-spin inline-block w-4 h-4 sm:w-5 sm:h-5 border-2 border-purple-600 border-t-transparent rounded-full"></div>
+                    <span className="ml-2 text-xs sm:text-sm">Searching...</span>
                   </div>
                 ) : placeSuggestions.length > 0 ? (
                   placeSuggestions.map((place, index) => (
@@ -282,13 +285,13 @@ export default function BirthForm() {
                       key={index}
                       type="button"
                       onClick={() => selectPlace(place)}
-                      className="w-full text-left px-4 py-3 hover:bg-purple-50 transition-colors duration-150 border-b border-gray-100 last:border-b-0"
+                      className="w-full text-left px-3 py-2.5 sm:px-4 sm:py-3 hover:bg-purple-50 active:bg-purple-100 transition-colors duration-150 border-b border-gray-100 last:border-b-0"
                     >
-                      <div className="font-medium text-gray-800">{place.display_name}</div>
+                      <div className="font-medium text-gray-800 text-xs sm:text-sm">{place.display_name}</div>
                     </button>
                   ))
                 ) : (
-                  <div className="px-4 py-3 text-gray-500 text-center">
+                  <div className="px-3 py-2.5 sm:px-4 sm:py-3 text-gray-500 text-center text-xs sm:text-sm">
                     No locations found
                   </div>
                 )}
@@ -296,39 +299,42 @@ export default function BirthForm() {
             )}
           </div>
 
-          {/* Latitude (Read-only) */}
-          <div>
-            <label htmlFor="latitude" className="block text-sm font-semibold text-gray-700 mb-2">
-              Latitude
-            </label>
-            <input
-              id="latitude"
-              type="text"
-              value={latitude !== null && latitude !== undefined ? latitude.toFixed(6) : ''}
-              readOnly
-              className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg bg-gray-50 text-gray-600 cursor-not-allowed"
-              placeholder="Auto-filled when place is selected"
-            />
-          </div>
+          {/* Coordinates Grid - Mobile Optimized */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+            {/* Latitude (Read-only) */}
+            <div>
+              <label htmlFor="latitude" className="block text-xs sm:text-sm font-semibold text-gray-700 mb-1.5 sm:mb-2">
+                Latitude
+              </label>
+              <input
+                id="latitude"
+                type="text"
+                value={latitude !== null && latitude !== undefined ? latitude.toFixed(6) : ''}
+                readOnly
+                className="w-full px-3 py-2.5 sm:px-4 sm:py-3 text-sm sm:text-base border-2 border-gray-200 rounded-lg bg-gray-50 text-gray-600 cursor-not-allowed"
+                placeholder="Auto-filled"
+              />
+            </div>
 
-          {/* Longitude (Read-only) */}
-          <div>
-            <label htmlFor="longitude" className="block text-sm font-semibold text-gray-700 mb-2">
-              Longitude
-            </label>
-            <input
-              id="longitude"
-              type="text"
-              value={longitude !== null && longitude !== undefined ? longitude.toFixed(6) : ''}
-              readOnly
-              className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg bg-gray-50 text-gray-600 cursor-not-allowed"
-              placeholder="Auto-filled when place is selected"
-            />
+            {/* Longitude (Read-only) */}
+            <div>
+              <label htmlFor="longitude" className="block text-xs sm:text-sm font-semibold text-gray-700 mb-1.5 sm:mb-2">
+                Longitude
+              </label>
+              <input
+                id="longitude"
+                type="text"
+                value={longitude !== null && longitude !== undefined ? longitude.toFixed(6) : ''}
+                readOnly
+                className="w-full px-3 py-2.5 sm:px-4 sm:py-3 text-sm sm:text-base border-2 border-gray-200 rounded-lg bg-gray-50 text-gray-600 cursor-not-allowed"
+                placeholder="Auto-filled"
+              />
+            </div>
           </div>
 
           {/* UTC Offset (Read-only) */}
           <div>
-            <label htmlFor="utcOffset" className="block text-sm font-semibold text-gray-700 mb-2">
+            <label htmlFor="utcOffset" className="block text-xs sm:text-sm font-semibold text-gray-700 mb-1.5 sm:mb-2">
               UTC Offset
             </label>
             <input
@@ -336,18 +342,23 @@ export default function BirthForm() {
               type="text"
               value={utcOffset !== null && utcOffset !== undefined ? `UTC ${utcOffset >= 0 ? '+' : ''}${utcOffset}` : ''}
               readOnly
-              className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg bg-gray-50 text-gray-600 cursor-not-allowed"
-              placeholder="Auto-filled when place is selected"
+              className="w-full px-3 py-2.5 sm:px-4 sm:py-3 text-sm sm:text-base border-2 border-gray-200 rounded-lg bg-gray-50 text-gray-600 cursor-not-allowed"
+              placeholder="Auto-filled"
             />
           </div>
 
           {/* Submit Button */}
-          <button
-            type="submit"
-            className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-bold py-4 px-6 rounded-lg hover:from-purple-700 hover:to-indigo-700 transform hover:scale-[1.02] transition-all duration-200 shadow-lg hover:shadow-xl"
-          >
-            Generate Birth Chart ✨
-          </button>
+          <div className="pt-2">
+            <button
+              type="submit"
+              className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-bold py-3 px-4 sm:py-4 sm:px-6 text-sm sm:text-base rounded-lg hover:from-purple-700 hover:to-indigo-700 active:scale-[0.98] sm:hover:scale-[1.02] transition-all duration-200 shadow-lg hover:shadow-xl"
+            >
+              <span className="inline-flex items-center justify-center gap-2">
+                <span>Generate Birth Chart</span>
+                <span className="text-lg">✨</span>
+              </span>
+            </button>
+          </div>
         </form>
       </div>
     </div>

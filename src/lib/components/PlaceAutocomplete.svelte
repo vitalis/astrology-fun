@@ -7,6 +7,8 @@
 			country?: string;
 			state?: string;
 			city?: string;
+			town?: string;
+			village?: string;
 		};
 	}
 
@@ -24,9 +26,16 @@
 	let isLoadingSuggestions = $state(false);
 	let abortController: AbortController | null = null;
 	let debounceTimeout: ReturnType<typeof setTimeout> | null = null;
+	let skipNextEffect = false; // Flag to prevent API call after selection
 
 	// Reactive statement to fetch place suggestions when value changes
 	$effect(() => {
+		// Skip the effect if we're setting the value programmatically after selection
+		if (skipNextEffect) {
+			skipNextEffect = false;
+			return;
+		}
+
 		if (!value || value.length < 3) {
 			placeSuggestions = [];
 			showSuggestions = false;
@@ -43,7 +52,7 @@
 					const response = await fetch(
 						`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
 							value
-						)}&limit=5&addressdetails=1`,
+						)}&limit=10&addressdetails=1&featuretype=city`,
 						{
 							headers: {
 								'User-Agent': 'Astrology-Fun-App/1.0 (Birth Chart Calculator)'
@@ -57,7 +66,15 @@
 					}
 
 					const data = await response.json();
-					placeSuggestions = data;
+
+					// Filter to only include cities, towns, and villages
+					const filteredData = data.filter((place: PlaceSuggestion) =>
+						place.address?.city ||
+						place.address?.town ||
+						place.address?.village
+					);
+
+					placeSuggestions = filteredData;
 					showSuggestions = true;
 				} catch (err) {
 					if (err instanceof Error && err.name === 'AbortError') {
@@ -76,6 +93,9 @@
 	function selectPlace(place: PlaceSuggestion) {
 		const lat = parseFloat(place.lat);
 		const lon = parseFloat(place.lon);
+
+		// Set flag to skip the next effect run
+		skipNextEffect = true;
 
 		value = place.display_name;
 		showSuggestions = false;

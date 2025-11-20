@@ -15,28 +15,26 @@ describe('BirthForm', () => {
     vi.clearAllMocks();
   });
 
+  it('renders form header', () => {
+    render(<BirthForm />);
+    expect(screen.getByText('Birth Chart Calculator')).toBeInTheDocument();
+    expect(screen.getByText(/discover your cosmic blueprint/i)).toBeInTheDocument();
+  });
+
   it('renders all form fields', () => {
     render(<BirthForm />);
 
-    expect(screen.getByPlaceholderText(/enter your name/i)).toBeInTheDocument();
-    expect(screen.getByText('Date of Birth')).toBeInTheDocument();
-    expect(screen.getByText('Time of Birth')).toBeInTheDocument();
-    expect(screen.getByPlaceholderText(/start typing a city/i)).toBeInTheDocument();
-    expect(screen.getByText('Latitude')).toBeInTheDocument();
-    expect(screen.getByText('Longitude')).toBeInTheDocument();
-    expect(screen.getByText('UTC Offset')).toBeInTheDocument();
-  });
-
-  it('renders the header with title and subtitle', () => {
-    render(<BirthForm />);
-
-    expect(screen.getByText('Birth Chart')).toBeInTheDocument();
-    expect(screen.getByText('Calculate Your Cosmic Blueprint')).toBeInTheDocument();
+    expect(screen.getByLabelText(/name/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/date of birth/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/time of birth/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/place of birth/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/latitude/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/longitude/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/utc offset/i)).toBeInTheDocument();
   });
 
   it('renders submit button', () => {
     render(<BirthForm />);
-
     expect(screen.getByRole('button', { name: /generate birth chart/i })).toBeInTheDocument();
   });
 
@@ -44,7 +42,7 @@ describe('BirthForm', () => {
     const user = userEvent.setup();
     render(<BirthForm />);
 
-    const nameInput = screen.getByPlaceholderText(/enter your name/i);
+    const nameInput = screen.getByLabelText(/name/i);
     await user.type(nameInput, 'John Doe');
 
     expect(nameInput).toHaveValue('John Doe');
@@ -54,7 +52,7 @@ describe('BirthForm', () => {
     const user = userEvent.setup();
     render(<BirthForm />);
 
-    const placeInput = screen.getByPlaceholderText(/start typing a city/i);
+    const placeInput = screen.getByLabelText(/place of birth/i);
     await user.type(placeInput, 'New York');
 
     expect(placeInput).toHaveValue('New York');
@@ -64,7 +62,7 @@ describe('BirthForm', () => {
     const user = userEvent.setup();
     render(<BirthForm />);
 
-    const placeInput = screen.getByPlaceholderText(/start typing a city/i);
+    const placeInput = screen.getByLabelText(/place of birth/i);
     await user.type(placeInput, 'Ne');
 
     // Wait a bit to ensure debounce would have fired
@@ -73,31 +71,36 @@ describe('BirthForm', () => {
     expect(global.fetch).not.toHaveBeenCalled();
   });
 
-  it('lat/lon/utc fields are read-only and disabled', () => {
+  it('lat/lon/utc fields are read-only', () => {
     render(<BirthForm />);
 
-    // Check for readonly inputs in the coordinate section
-    const readonlyInputs = document.querySelectorAll('input[readonly]');
-    expect(readonlyInputs.length).toBeGreaterThanOrEqual(3);
+    const latInput = screen.getByLabelText(/latitude/i);
+    const lonInput = screen.getByLabelText(/longitude/i);
+    const utcInput = screen.getByLabelText(/utc offset/i);
 
-    // Verify they have the disabled attribute too (Konsta UI pattern)
-    const disabledInputs = document.querySelectorAll('input[disabled]');
-    expect(disabledInputs.length).toBeGreaterThanOrEqual(3);
+    expect(latInput).toHaveAttribute('readonly');
+    expect(lonInput).toHaveAttribute('readonly');
+    expect(utcInput).toHaveAttribute('readonly');
   });
 
-  it('name field is marked as optional in placeholder', () => {
+  it('name field is marked as optional', () => {
     render(<BirthForm />);
 
-    const nameInput = screen.getByPlaceholderText(/enter your name \(optional\)/i);
-    expect(nameInput).toBeInTheDocument();
+    const nameLabel = screen.getByText(/name/i);
+    expect(nameLabel.textContent).toMatch(/optional/i);
   });
 
-  it('renders section titles correctly', () => {
+  it('required fields are marked with asterisk', () => {
     render(<BirthForm />);
 
-    expect(screen.getByText('Personal Information')).toBeInTheDocument();
-    expect(screen.getByText('Birth Location')).toBeInTheDocument();
-    expect(screen.getByText(/Coordinates.*Auto-filled/i)).toBeInTheDocument();
+    const labels = screen.getAllByText('*');
+    expect(labels.length).toBeGreaterThanOrEqual(3); // At least 3 required fields
+  });
+
+  it('displays privacy notice', () => {
+    render(<BirthForm />);
+
+    expect(screen.getByText(/your privacy is protected/i)).toBeInTheDocument();
   });
 
   it('has proper form structure', () => {
@@ -114,18 +117,11 @@ describe('BirthForm', () => {
     expect(document.querySelector('input[name="placeOfBirth"]')).toBeInTheDocument();
   });
 
-  it('displays privacy notice', () => {
-    render(<BirthForm />);
-
-    expect(screen.getByText(/your privacy is protected/i)).toBeInTheDocument();
-  });
-
-  it('submit button has proper styling and content', () => {
+  it('submit button has proper content', () => {
     render(<BirthForm />);
 
     const submitButton = screen.getByRole('button', { name: /generate birth chart/i });
     expect(submitButton).toBeInTheDocument();
     expect(submitButton.textContent).toContain('Generate Birth Chart');
-    expect(submitButton.textContent).toContain('✨');
   });
 });

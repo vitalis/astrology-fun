@@ -1,4 +1,15 @@
 @import "tailwindcss";
+@import "konsta/svelte/theme.css";
+
+@theme {
+  /* Primary brand color - cosmic indigo/purple */
+  --color-brand-primary: #6366f1;
+
+  /* Secondary colors for astrology theme */
+  --color-brand-secondary: #8b5cf6;
+  --color-brand-accent: #ec4899;
+  --color-brand-cosmic: #3730a3;
+}
 
 * {
   -webkit-tap-highlight-color: transparent;

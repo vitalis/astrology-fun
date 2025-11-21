@@ -1,7 +1,13 @@
 <script lang="ts">
 	import '../app.css';
+	import { App } from 'konsta/svelte';
+
+	// Detect iOS for native-like experience
+	const isIOS = typeof window !== 'undefined' &&
+		/iPad|iPhone|iPod/.test(navigator.userAgent);
+	const theme = isIOS ? 'ios' : 'material';
 </script>
 
-<div class="min-h-screen bg-gray-50 dark:bg-gray-900 py-4 sm:py-6 md:py-8 lg:py-12 px-3 sm:px-4 md:px-6 transition-colors">
+<App theme={theme} safeAreas>
 	<slot />
-</div>
+</App>

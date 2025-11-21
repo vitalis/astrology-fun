@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { Card, ListInput, ListItem, List, Preloader } from 'konsta/svelte';
+
 	interface PlaceSuggestion {
 		display_name: string;
 		lat: string;
@@ -68,10 +70,9 @@
 					const data = await response.json();
 
 					// Filter to only include cities, towns, and villages
-					const filteredData = data.filter((place: PlaceSuggestion) =>
-						place.address?.city ||
-						place.address?.town ||
-						place.address?.village
+					const filteredData = data.filter(
+						(place: PlaceSuggestion) =>
+							place.address?.city || place.address?.town || place.address?.village
 					);
 
 					placeSuggestions = filteredData;
@@ -110,54 +111,52 @@
 </script>
 
 <div class="relative">
-	<label
-		for="placeOfBirth"
-		class="block text-sm sm:text-base font-medium text-gray-700 dark:text-gray-300 mb-2"
-	>
-		Place of Birth <span class="text-red-500 dark:text-red-400">*</span>
-	</label>
-	<input
-		id="placeOfBirth"
+	<ListInput
+		label="Place of Birth"
 		type="text"
-		bind:value
-		class="w-full px-4 py-3 text-base bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 focus:border-transparent outline-none transition min-h-[44px] sm:min-h-[48px]"
 		placeholder="Start typing a city..."
-		autocomplete="off"
+		bind:value
+		outline
+		floatingLabel
+		clearButton
+		error={!!error}
+		class="mb-0"
 	/>
+
 	{#if error}
 		<p class="mt-2 text-sm text-red-600 dark:text-red-400">{error}</p>
 	{/if}
 
-	<!-- Autocomplete Suggestions - Touch-optimized -->
+	<!-- Autocomplete Suggestions -->
 	{#if showSuggestions}
-		<div
-			class="absolute z-20 w-full mt-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg shadow-xl max-h-60 overflow-y-auto"
-		>
-			{#if isLoadingSuggestions}
-				<div
-					class="px-4 py-3 sm:py-4 text-gray-600 dark:text-gray-400 text-center text-sm sm:text-base"
-				>
-					Searching...
-				</div>
-			{:else if placeSuggestions.length > 0}
-				{#each placeSuggestions as place (place.display_name)}
-					<button
-						type="button"
-						onclick={() => selectPlace(place)}
-						class="w-full text-left px-4 py-3 sm:py-4 hover:bg-gray-100 dark:hover:bg-gray-600 transition border-b border-gray-200 dark:border-gray-600 last:border-b-0 min-h-[44px] sm:min-h-[48px]"
-					>
-						<div class="text-sm sm:text-base text-gray-900 dark:text-white font-medium">
-							{place.display_name}
-						</div>
-					</button>
-				{/each}
-			{:else}
-				<div
-					class="px-4 py-3 sm:py-4 text-gray-600 dark:text-gray-400 text-center text-sm sm:text-base"
-				>
-					No locations found
-				</div>
-			{/if}
+		<div class="absolute z-20 w-full mt-2">
+			<Card outline class="!shadow-lg overflow-hidden">
+				<List class="!m-0">
+					{#if isLoadingSuggestions}
+						<ListItem>
+							<div class="flex items-center justify-center py-4">
+								<Preloader />
+								<span class="ml-2 text-gray-700 dark:text-gray-300">Searching...</span>
+							</div>
+						</ListItem>
+					{:else if placeSuggestions.length > 0}
+						{#each placeSuggestions as place (place.display_name)}
+							<ListItem
+								link
+								title={place.display_name}
+								onClick={() => selectPlace(place)}
+								class="hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer transition-colors"
+							/>
+						{/each}
+					{:else}
+						<ListItem>
+							<div class="text-center py-4 text-gray-600 dark:text-gray-400">
+								No cities found
+							</div>
+						</ListItem>
+					{/if}
+				</List>
+			</Card>
 		</div>
 	{/if}
 </div>

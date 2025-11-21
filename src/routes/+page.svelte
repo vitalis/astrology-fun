@@ -10,4 +10,6 @@
 	/>
 </svelte:head>
 
-<BirthForm />
+<div class="min-h-screen py-8 px-4">
+	<BirthForm />
+</div>

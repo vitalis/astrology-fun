@@ -1,6 +1,5 @@
 <script lang="ts">
-	import BirthFormHeader from './BirthFormHeader.svelte';
-	import FormInput from './FormInput.svelte';
+	import { Block, List, ListInput, Button, BlockTitle } from 'konsta/svelte';
 	import PlaceAutocomplete from './PlaceAutocomplete.svelte';
 	import CoordinatesDisplay from './CoordinatesDisplay.svelte';
 
@@ -58,9 +57,8 @@
 
 			throw new Error('Invalid timezone data');
 		} catch (error) {
-			console.error('Error fetching timezone:', error);
-			const offset = Math.round(lon / 15);
-			return offset;
+			console.error('UTC offset fetch error:', error);
+			throw error;
 		}
 	}
 
@@ -100,22 +98,13 @@
 		if (!formData.dateOfBirth) {
 			errors.dateOfBirth = 'Date of birth is required';
 		}
+
 		if (!formData.timeOfBirth) {
 			errors.timeOfBirth = 'Time of birth is required';
 		}
+
 		if (!formData.placeOfBirth) {
 			errors.placeOfBirth = 'Place of birth is required';
-		}
-
-		// Validate location data
-		if (
-			formData.latitude === null ||
-			formData.longitude === null ||
-			formData.utcOffset === null
-		) {
-			apiError =
-				'Please select a location from the suggestions to auto-fill coordinates and timezone.';
-			return;
 		}
 
 		// Check if there are any errors
@@ -131,79 +120,75 @@
 	}
 </script>
 
-<div class="max-w-2xl mx-auto">
-	<!-- Clean Card with theme support -->
-	<div
-		class="bg-white dark:bg-gray-800 rounded-lg sm:rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden transition-colors"
+<Block class="space-y-4" strong inset>
+	<!-- Personal Information -->
+	<List>
+		<ListInput
+			label="Name"
+			type="text"
+			placeholder="Enter your name"
+			bind:value={formData.name}
+			floatingLabel
+			clearButton
+		/>
+
+		<ListInput
+			label="Date of Birth"
+			type="date"
+			bind:value={formData.dateOfBirth}
+			floatingLabel
+			error={errors.dateOfBirth}
+			errorMessage={errors.dateOfBirth}
+		/>
+
+		<ListInput
+			label="Time of Birth"
+			type="time"
+			bind:value={formData.timeOfBirth}
+			floatingLabel
+			error={errors.timeOfBirth}
+			errorMessage={errors.timeOfBirth}
+		/>
+	</List>
+
+	<!-- Place of Birth Section -->
+	<BlockTitle>Place of Birth</BlockTitle>
+	<PlaceAutocomplete
+		bind:value={formData.placeOfBirth}
+		error={errors.placeOfBirth}
+		onselect={handlePlaceSelect}
+		onerror={handlePlaceError}
+	/>
+
+	<!-- API Error -->
+	{#if apiError}
+		<Block class="text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/20 rounded-lg">
+			<p class="text-sm">{apiError}</p>
+		</Block>
+	{/if}
+
+	<!-- Coordinates Section -->
+	{#if formData.latitude && formData.longitude}
+		<BlockTitle>Coordinates (Auto-filled)</BlockTitle>
+		<CoordinatesDisplay
+			latitude={formData.latitude}
+			longitude={formData.longitude}
+			utcOffset={formData.utcOffset}
+		/>
+	{/if}
+
+	<!-- Submit Button -->
+	<Button
+		large
+		onClick={handleSubmit}
+		class="k-color-brand-primary"
 	>
-		<BirthFormHeader />
+		Generate Birth Chart
+	</Button>
 
-		<!-- Form - Responsive padding and spacing -->
-		<form onsubmit={handleSubmit} class="p-4 sm:p-6 md:p-8 space-y-4 sm:space-y-5">
-			<!-- Name Field -->
-			<FormInput
-				id="name"
-				label="Name"
-				bind:value={formData.name}
-				placeholder="Enter your name"
-			/>
-
-			<!-- Date of Birth -->
-			<FormInput
-				id="dateOfBirth"
-				label="Date of Birth"
-				type="date"
-				required
-				bind:value={formData.dateOfBirth}
-				error={errors.dateOfBirth}
-			/>
-
-			<!-- Time of Birth -->
-			<FormInput
-				id="timeOfBirth"
-				label="Time of Birth"
-				type="time"
-				step="60"
-				required
-				bind:value={formData.timeOfBirth}
-				error={errors.timeOfBirth}
-			/>
-
-			<!-- Place of Birth with Autocomplete -->
-			<PlaceAutocomplete
-				bind:value={formData.placeOfBirth}
-				error={errors.placeOfBirth}
-				onselect={handlePlaceSelect}
-				onerror={handlePlaceError}
-			/>
-
-			<!-- API Error -->
-			{#if apiError}
-				<div
-					class="p-3 sm:p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg"
-				>
-					<p class="text-sm sm:text-base text-red-700 dark:text-red-400">{apiError}</p>
-				</div>
-			{/if}
-
-			<!-- Coordinates Section -->
-			<CoordinatesDisplay
-				latitude={formData.latitude}
-				longitude={formData.longitude}
-				utcOffset={formData.utcOffset}
-			/>
-
-			<!-- Submit Button -->
-			<button
-				type="submit"
-				class="w-full bg-indigo-600 dark:bg-indigo-500 hover:bg-indigo-700 dark:hover:bg-indigo-600 text-white font-semibold py-3.5 sm:py-4 px-6 text-base sm:text-lg rounded-lg transition-all duration-200 transform hover:scale-[1.01] active:scale-[0.99] min-h-[48px] sm:min-h-[52px] shadow-md hover:shadow-lg"
-			>
-				Generate Birth Chart
-			</button>
-
-			<p class="text-center text-xs sm:text-sm text-gray-600 dark:text-gray-400">
-				Your privacy is protected. Data is processed locally.
-			</p>
-		</form>
-	</div>
-</div>
+	<Block class="text-center">
+		<p class="text-xs text-gray-600 dark:text-gray-400">
+			Your privacy is protected. Data is processed locally.
+		</p>
+	</Block>
+</Block>

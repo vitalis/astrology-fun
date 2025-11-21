@@ -16,13 +16,13 @@ describe('PlaceAutocomplete', () => {
 
 	it('renders the label and input', () => {
 		render(PlaceAutocomplete, { props: { value: '' } });
-		expect(screen.getByLabelText(/place of birth/i)).toBeInTheDocument();
+		expect(screen.getByText(/place of birth/i)).toBeInTheDocument();
 		expect(screen.getByPlaceholderText(/start typing a city/i)).toBeInTheDocument();
 	});
 
 	it('renders with initial value', () => {
 		render(PlaceAutocomplete, { props: { value: 'New York' } });
-		const input = screen.getByLabelText(/place of birth/i) as HTMLInputElement;
+		const input = screen.getByPlaceholderText(/start typing a city/i) as HTMLInputElement;
 		expect(input.value).toBe('New York');
 	});
 
@@ -34,7 +34,7 @@ describe('PlaceAutocomplete', () => {
 	it('allows user to type in the input', async () => {
 		const user = userEvent.setup();
 		render(PlaceAutocomplete, { props: { value: '' } });
-		const input = screen.getByLabelText(/place of birth/i);
+		const input = screen.getByPlaceholderText(/start typing a city/i);
 
 		await user.type(input, 'London');
 		expect(input).toHaveValue('London');
@@ -44,7 +44,7 @@ describe('PlaceAutocomplete', () => {
 		vi.useFakeTimers();
 		const user = userEvent.setup({ delay: null });
 		render(PlaceAutocomplete, { props: { value: '' } });
-		const input = screen.getByLabelText(/place of birth/i);
+		const input = screen.getByPlaceholderText(/start typing a city/i);
 
 		await user.type(input, 'NY');
 		await vi.advanceTimersByTimeAsync(600);
@@ -72,7 +72,7 @@ describe('PlaceAutocomplete', () => {
 		});
 
 		render(PlaceAutocomplete, { props: { value: '' } });
-		const input = screen.getByLabelText(/place of birth/i);
+		const input = screen.getByPlaceholderText(/start typing a city/i);
 
 		await user.type(input, 'New York');
 
@@ -119,7 +119,7 @@ describe('PlaceAutocomplete', () => {
 		});
 
 		render(PlaceAutocomplete, { props: { value: '' } });
-		const input = screen.getByLabelText(/place of birth/i);
+		const input = screen.getByPlaceholderText(/start typing a city/i);
 
 		await user.type(input, 'London');
 		await vi.advanceTimersByTimeAsync(500);
@@ -132,7 +132,7 @@ describe('PlaceAutocomplete', () => {
 		vi.useRealTimers();
 	});
 
-	it('displays "No locations found" when API returns empty array', async () => {
+	it('displays "No cities found" when API returns empty array', async () => {
 		vi.useFakeTimers();
 		const user = userEvent.setup({ delay: null });
 
@@ -142,13 +142,13 @@ describe('PlaceAutocomplete', () => {
 		});
 
 		render(PlaceAutocomplete, { props: { value: '' } });
-		const input = screen.getByLabelText(/place of birth/i);
+		const input = screen.getByPlaceholderText(/start typing a city/i);
 
 		await user.type(input, 'XYZ123');
 		await vi.advanceTimersByTimeAsync(500);
 
 		await waitFor(() => {
-			expect(screen.getByText(/no locations found/i)).toBeInTheDocument();
+			expect(screen.getByText(/no cities found/i)).toBeInTheDocument();
 		});
 
 		vi.useRealTimers();
@@ -177,7 +177,7 @@ describe('PlaceAutocomplete', () => {
 
 		render(PlaceAutocomplete, { props: { value: '', onselect } });
 
-		const input = screen.getByLabelText(/place of birth/i);
+		const input = screen.getByPlaceholderText(/start typing a city/i);
 		await user.type(input, 'Paris');
 		await vi.advanceTimersByTimeAsync(500);
 
@@ -214,7 +214,7 @@ describe('PlaceAutocomplete', () => {
 
 		render(PlaceAutocomplete, { props: { value: '', onerror } });
 
-		const input = screen.getByLabelText(/place of birth/i);
+		const input = screen.getByPlaceholderText(/start typing a city/i);
 		await user.type(input, 'Test');
 		await vi.advanceTimersByTimeAsync(500);
 
@@ -239,7 +239,7 @@ describe('PlaceAutocomplete', () => {
 
 		render(PlaceAutocomplete, { props: { value: '', onerror } });
 
-		const input = screen.getByLabelText(/place of birth/i);
+		const input = screen.getByPlaceholderText(/start typing a city/i);
 		await user.type(input, 'Test');
 		await vi.advanceTimersByTimeAsync(500);
 

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { List, ListInput, ListItem, Block, Preloader } from 'konsta/svelte';
+	import { Card, ListInput, ListItem, List, Preloader } from 'konsta/svelte';
 
 	interface PlaceSuggestion {
 		display_name: string;
@@ -111,46 +111,52 @@
 </script>
 
 <div class="relative">
-	<List>
-		<ListInput
-			label="Place of Birth"
-			type="text"
-			placeholder="Start typing a city..."
-			bind:value
-			floatingLabel
-			clearButton
-			error={!!error}
-			errorMessage={error}
-		/>
-	</List>
+	<ListInput
+		label="Place of Birth"
+		type="text"
+		placeholder="Start typing a city..."
+		bind:value
+		outline
+		floatingLabel
+		clearButton
+		error={!!error}
+		class="mb-0"
+	/>
+
+	{#if error}
+		<p class="mt-2 text-sm text-red-600 dark:text-red-400">{error}</p>
+	{/if}
 
 	<!-- Autocomplete Suggestions -->
 	{#if showSuggestions}
-		<div class="absolute z-20 w-full mt-1 shadow-lg rounded-lg overflow-hidden">
-			<List>
-				{#if isLoadingSuggestions}
-					<ListItem>
-						<div class="flex items-center justify-center py-4">
-							<Preloader />
-							<span class="ml-2">Searching...</span>
-						</div>
-					</ListItem>
-				{:else if placeSuggestions.length > 0}
-					{#each placeSuggestions as place (place.display_name)}
-						<ListItem
-							link
-							title={place.display_name}
-							onClick={() => selectPlace(place)}
-						/>
-					{/each}
-				{:else}
-					<ListItem>
-						<div class="text-center py-4 text-gray-600 dark:text-gray-400">
-							No cities found
-						</div>
-					</ListItem>
-				{/if}
-			</List>
+		<div class="absolute z-20 w-full mt-2">
+			<Card outline class="!shadow-lg overflow-hidden">
+				<List class="!m-0">
+					{#if isLoadingSuggestions}
+						<ListItem>
+							<div class="flex items-center justify-center py-4">
+								<Preloader />
+								<span class="ml-2 text-gray-700 dark:text-gray-300">Searching...</span>
+							</div>
+						</ListItem>
+					{:else if placeSuggestions.length > 0}
+						{#each placeSuggestions as place (place.display_name)}
+							<ListItem
+								link
+								title={place.display_name}
+								onClick={() => selectPlace(place)}
+								class="hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer transition-colors"
+							/>
+						{/each}
+					{:else}
+						<ListItem>
+							<div class="text-center py-4 text-gray-600 dark:text-gray-400">
+								No cities found
+							</div>
+						</ListItem>
+					{/if}
+				</List>
+			</Card>
 		</div>
 	{/if}
 </div>

@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { Page, Navbar } from 'konsta/svelte';
 	import BirthForm from '$lib/components/BirthForm.svelte';
 </script>
 
@@ -11,11 +10,6 @@
 	/>
 </svelte:head>
 
-<Page>
-	<Navbar
-		title="Birth Chart Calculator"
-		subtitle="Discover your cosmic blueprint"
-		class="k-color-brand-primary"
-	/>
+<div class="min-h-screen py-8 px-4">
 	<BirthForm />
-</Page>
+</div>

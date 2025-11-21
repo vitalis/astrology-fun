@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Block, List, ListInput, Button, BlockTitle } from 'konsta/svelte';
+	import { Card, Block, ListInput, Button, BlockTitle } from 'konsta/svelte';
 	import PlaceAutocomplete from './PlaceAutocomplete.svelte';
 	import CoordinatesDisplay from './CoordinatesDisplay.svelte';
 
@@ -120,75 +120,100 @@
 	}
 </script>
 
-<Block class="space-y-4" strong inset>
-	<!-- Personal Information -->
-	<List>
-		<ListInput
-			label="Name"
-			type="text"
-			placeholder="Enter your name"
-			bind:value={formData.name}
-			floatingLabel
-			clearButton
-		/>
+<div class="max-w-2xl mx-auto">
+	<Card outline raised class="overflow-hidden">
+		{#snippet header()}
+			<div class="px-6 py-8 text-center border-b border-gray-200 dark:border-gray-700">
+				<h1 class="text-3xl font-semibold text-gray-900 dark:text-white mb-2">
+					Birth Chart Calculator
+				</h1>
+				<p class="text-base text-gray-600 dark:text-gray-400">
+					Discover your cosmic blueprint
+				</p>
+			</div>
+		{/snippet}
 
-		<ListInput
-			label="Date of Birth"
-			type="date"
-			bind:value={formData.dateOfBirth}
-			floatingLabel
-			error={errors.dateOfBirth}
-			errorMessage={errors.dateOfBirth}
-		/>
+		<div class="p-8 space-y-6">
+			<!-- Personal Information -->
+			<div class="space-y-5">
+				<ListInput
+					label="Name"
+					type="text"
+					placeholder="Enter your name"
+					bind:value={formData.name}
+					outline
+					floatingLabel
+					clearButton
+					class="mb-4"
+				/>
 
-		<ListInput
-			label="Time of Birth"
-			type="time"
-			bind:value={formData.timeOfBirth}
-			floatingLabel
-			error={errors.timeOfBirth}
-			errorMessage={errors.timeOfBirth}
-		/>
-	</List>
+				<ListInput
+					label="Date of Birth"
+					type="date"
+					bind:value={formData.dateOfBirth}
+					outline
+					floatingLabel
+					error={!!errors.dateOfBirth}
+					class="mb-4"
+				/>
 
-	<!-- Place of Birth Section -->
-	<BlockTitle>Place of Birth</BlockTitle>
-	<PlaceAutocomplete
-		bind:value={formData.placeOfBirth}
-		error={errors.placeOfBirth}
-		onselect={handlePlaceSelect}
-		onerror={handlePlaceError}
-	/>
+				<ListInput
+					label="Time of Birth"
+					type="time"
+					bind:value={formData.timeOfBirth}
+					outline
+					floatingLabel
+					error={!!errors.timeOfBirth}
+					class="mb-4"
+				/>
+			</div>
 
-	<!-- API Error -->
-	{#if apiError}
-		<Block class="text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/20 rounded-lg">
-			<p class="text-sm">{apiError}</p>
-		</Block>
-	{/if}
+			<!-- Place of Birth Section -->
+			<div>
+				<BlockTitle class="!text-lg !font-semibold !text-gray-900 dark:!text-white !mb-3">
+					Place of Birth
+				</BlockTitle>
+				<PlaceAutocomplete
+					bind:value={formData.placeOfBirth}
+					error={errors.placeOfBirth}
+					onselect={handlePlaceSelect}
+					onerror={handlePlaceError}
+				/>
+			</div>
 
-	<!-- Coordinates Section -->
-	{#if formData.latitude && formData.longitude}
-		<BlockTitle>Coordinates (Auto-filled)</BlockTitle>
-		<CoordinatesDisplay
-			latitude={formData.latitude}
-			longitude={formData.longitude}
-			utcOffset={formData.utcOffset}
-		/>
-	{/if}
+			<!-- API Error -->
+			{#if apiError}
+				<div class="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
+					<p class="text-sm text-red-700 dark:text-red-400">{apiError}</p>
+				</div>
+			{/if}
 
-	<!-- Submit Button -->
-	<Button
-		large
-		onClick={handleSubmit}
-		class="k-color-brand-primary"
-	>
-		Generate Birth Chart
-	</Button>
+			<!-- Coordinates Section -->
+			{#if formData.latitude && formData.longitude}
+				<div>
+					<BlockTitle class="!text-lg !font-semibold !text-gray-900 dark:!text-white !mb-3">
+						Coordinates (Auto-filled)
+					</BlockTitle>
+					<CoordinatesDisplay
+						latitude={formData.latitude}
+						longitude={formData.longitude}
+						utcOffset={formData.utcOffset}
+					/>
+				</div>
+			{/if}
 
-	<Block class="text-center">
-		<p class="text-xs text-gray-600 dark:text-gray-400">
-			Your privacy is protected. Data is processed locally.
-		</p>
-	</Block>
-</Block>
+			<!-- Submit Button -->
+			<Button
+				large
+				onClick={handleSubmit}
+				class="w-full !bg-indigo-600 dark:!bg-indigo-500 hover:!bg-indigo-700 dark:hover:!bg-indigo-600 !text-white !font-semibold !py-4 !rounded-lg !shadow-md hover:!shadow-lg !transition-all !duration-200 transform hover:scale-[1.01] active:scale-[0.99]"
+			>
+				Generate Birth Chart
+			</Button>
+
+			<p class="text-center text-sm text-gray-600 dark:text-gray-400 mt-4">
+				Your privacy is protected. Data is processed locally.
+			</p>
+		</div>
+	</Card>
+</div>
